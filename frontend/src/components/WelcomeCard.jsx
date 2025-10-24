@@ -24,28 +24,30 @@ export default function WelcomeCard() {
           Play, collect, and win real money — then withdraw it directly to your bank account!
         </p>
 
-        <div className="info-list">
-          <div className="info-item">
-            <span className="icon">✨</span>
-            <div>
-              <p className="info-title">Tap the screen</p>
-              <p className="info-desc">Tap the screen to collect as much money as you can.</p>
+        <div>
+          <div className="info-list">
+            <div className="info-item">
+              <span className="icon">✨</span>
+              <div>
+                <p className="info-title">Tap the screen</p>
+                <p className="info-desc">Tap the screen to collect as much money as you can.</p>
+              </div>
             </div>
-          </div>
 
-          <div className="info-item">
-            <span className="icon">🤝</span>
-            <div>
-              <p className="info-title">Invite your friends</p>
-              <p className="info-desc">Invite your friends and win real money together!</p>
+            <div className="info-item">
+              <span className="icon">🤝</span>
+              <div>
+                <p className="info-title">Invite your friends</p>
+                <p className="info-desc">Invite your friends and win real money together!</p>
+              </div>
             </div>
-          </div>
 
-          <div className="info-item">
-            <span className="icon">💪</span>
-            <div>
-              <p className="info-title">Buy boosts and upgrades</p>
-              <p className="info-desc">Upgrade your game and earn even more!</p>
+            <div className="info-item">
+              <span className="icon">💪</span>
+              <div>
+                <p className="info-title">Buy boosts and upgrades</p>
+                <p className="info-desc">Upgrade your game and earn even more!</p>
+              </div>
             </div>
           </div>
         </div>
