@@ -106,5 +106,5 @@ You can deploy the backend and frontend separately. For example:
 This project is licensed under the MIT License.
 
 ### Contact
-Created by **Ayman Abusura.
+Created by Ayman Abusura.
 Feel free to reach out via GitHub or email for collaboration or questions.
