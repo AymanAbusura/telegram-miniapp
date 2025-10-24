@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react";
-import coinImg from "../assets/coin.png";
+import coinImg from "../assets/coin.webp";
 
 export default function UpgradeLevel({ onClose }) {
     return (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import useBalance from "../hooks/useBalance";
 import MenuBar from './MenuBar';
-import coinImg from "../assets/coin.png";
+import coinImg from "../assets/coin.webp";
 import { ArrowUp, ArrowLeftRight } from 'lucide-react';
 
 import AnimatedModal from "../components/AnimatedModal";

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import coinImg from "../assets/coin.png";
+import coinImg from "../assets/coin.webp";
 import { ChevronRight, ArrowUp } from "lucide-react";
 import MenuBar from "./MenuBar";
 import useBalance from "../hooks/useBalance";

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import coinImg from "../assets/coin.png";
+import coinImg from "../assets/coin.webp";
 
 export default function WelcomeCard() {
   const navigate = useNavigate();

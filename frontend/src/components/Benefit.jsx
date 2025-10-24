@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import useBalance from "../hooks/useBalance";
-import coinImg from "../assets/coin.png";
+import coinImg from "../assets/coin.webp";
 import { ChevronRight } from "lucide-react";
 import MenuBar from "./MenuBar";
 
