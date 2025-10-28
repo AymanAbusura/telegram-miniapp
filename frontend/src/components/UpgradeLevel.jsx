@@ -32,7 +32,10 @@ export default function UpgradeLevel({ onClose }) {
                 </div>
                 <button 
                     className="amount-submit-button subscribe-update-button"
-                    onClick={() => window.open(process.env.REACT_APP_TELEGRAM_LINK, "_blank")}
+                    onClick={() => {
+                        const telegramLink = process.env.REACT_APP_TELEGRAM_LINK?.replace(/^https?:\/\//, 'tg://');
+                        window.location.href = telegramLink;
+                    }}
                 >
                     Subscribe
                 </button>
