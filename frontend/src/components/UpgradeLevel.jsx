@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import coinImg from "../assets/coin.webp";
+import { openTelegram } from '../utils/openTelegram';
 
 export default function UpgradeLevel({ onClose }) {
     return (
@@ -32,7 +33,7 @@ export default function UpgradeLevel({ onClose }) {
                 </div>
                 <button 
                     className="amount-submit-button subscribe-update-button"
-                    onClick={() => window.open(process.env.REACT_APP_TELEGRAM_LINK, "_blank")}
+                    onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
                 >
                     Subscribe
                 </button>

@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import channelProfile from "../assets/channel_profile.webp";
+import { openTelegram } from '../utils/openTelegram';
 
 export default function UpdateCard({ onClose }) {
     return (
@@ -24,7 +25,7 @@ export default function UpdateCard({ onClose }) {
             <div className="update-buttons">
                 <button 
                     className="amount-submit-button subscribe-update-button"
-                    onClick={() => window.open(process.env.REACT_APP_TELEGRAM_LINK, "_blank")}
+                    onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
                 >
                     Subscribe
                 </button>
