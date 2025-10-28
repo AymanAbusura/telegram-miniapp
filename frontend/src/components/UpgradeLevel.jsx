@@ -16,13 +16,16 @@ export default function UpgradeLevel({ onClose }) {
             tgLink = inviteLink;
         }
 
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const a = document.createElement("a");
+        a.href = tgLink;
+        a.target = "_blank";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
-        if (isMobile) {
-            window.location.href = tgLink;
-        } else {
+        setTimeout(() => {
             window.open(inviteLink, "_blank");
-        }
+        }, 1000);
     };
 
     return (
