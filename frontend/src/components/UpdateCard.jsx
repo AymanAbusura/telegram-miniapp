@@ -2,6 +2,27 @@ import { ChevronRight } from "lucide-react";
 import channelProfile from "../assets/channel_profile.webp";
 
 export default function UpdateCard({ onClose }) {
+    const handleTelegramClick = () => {
+        const inviteLink = process.env.REACT_APP_TELEGRAM_LINK;
+        let tgLink;
+
+        if (inviteLink.includes("t.me/+")) {
+            const inviteCode = inviteLink.split("+")[1];
+            tgLink = `tg://join?invite=${inviteCode}`;
+        } else if (inviteLink.includes("t.me/")) {
+            const username = inviteLink.split("t.me/")[1];
+            tgLink = `tg://resolve?domain=${username}`;
+        } else {
+            tgLink = inviteLink;
+        }
+
+        const timeout = setTimeout(() => {
+            window.open(inviteLink, "_blank");
+        }, 500);
+
+        window.location.href = tgLink;
+    };
+
     return (
         <>
             <img
@@ -24,27 +45,11 @@ export default function UpdateCard({ onClose }) {
             <div className="update-buttons">
                 <button 
                     className="amount-submit-button subscribe-update-button"
+                    onClick={handleTelegramClick}
                     // onClick={() => {
                     //     const telegramLink = process.env.REACT_APP_TELEGRAM_LINK?.replace(/^https?:\/\//, 'tg://');
                     //     window.location.href = telegramLink;
                     // }}
-                    onClick={() => {
-    // Получаем username/код канала из ссылки
-    const inviteLink = process.env.REACT_APP_TELEGRAM_LINK; // "https://t.me/+nSeKpMWH0dI5N2Mx"
-    
-    let telegramURL = inviteLink;
-
-    if (inviteLink.includes("t.me/+")) {
-      // Это инвайт-ссылка на канал
-      const inviteCode = inviteLink.split("+")[1];
-      telegramURL = `tg://join?invite=${inviteCode}`;
-    } else if (inviteLink.includes("t.me/")) {
-      const username = inviteLink.split("t.me/")[1];
-      telegramURL = `tg://resolve?domain=${username}`;
-    }
-
-    window.location.href = telegramURL;
-  }}
                 >
                     Subscribe
                 </button>
