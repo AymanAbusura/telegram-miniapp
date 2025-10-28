@@ -16,13 +16,15 @@ export default function UpgradeLevel({ onClose }) {
             tgLink = inviteLink;
         }
 
-        const timeout = setTimeout(() => {
-            window.open(inviteLink, "_blank");
-        }, 500);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        window.location.href = tgLink;
+        if (isMobile) {
+            window.location.href = tgLink;
+        } else {
+            window.open(inviteLink, "_blank");
+        }
     };
-    
+
     return (
         <>
             <div className="upgrade-image">
@@ -53,10 +55,6 @@ export default function UpgradeLevel({ onClose }) {
                 </div>
                 <button 
                     className="amount-submit-button subscribe-update-button"
-                    // onClick={() => {
-                    //     const telegramLink = process.env.REACT_APP_TELEGRAM_LINK?.replace(/^https?:\/\//, 'tg://');
-                    //     window.location.href = telegramLink;
-                    // }}
                     onClick={handleTelegramClick}
                 >
                     Subscribe

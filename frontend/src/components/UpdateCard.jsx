@@ -16,11 +16,13 @@ export default function UpdateCard({ onClose }) {
             tgLink = inviteLink;
         }
 
-        const timeout = setTimeout(() => {
-            window.open(inviteLink, "_blank");
-        }, 500);
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        window.location.href = tgLink;
+        if (isMobile) {
+            window.location.href = tgLink;
+        } else {
+            window.open(inviteLink, "_blank");
+        }
     };
 
     return (
