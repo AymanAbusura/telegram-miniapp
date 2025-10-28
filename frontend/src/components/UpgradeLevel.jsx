@@ -32,10 +32,27 @@ export default function UpgradeLevel({ onClose }) {
                 </div>
                 <button 
                     className="amount-submit-button subscribe-update-button"
+                    // onClick={() => {
+                    //     const telegramLink = process.env.REACT_APP_TELEGRAM_LINK?.replace(/^https?:\/\//, 'tg://');
+                    //     window.location.href = telegramLink;
+                    // }}
                     onClick={() => {
-                        const telegramLink = process.env.REACT_APP_TELEGRAM_LINK?.replace(/^https?:\/\//, 'tg://');
-                        window.location.href = telegramLink;
-                    }}
+    // Получаем username/код канала из ссылки
+    const inviteLink = process.env.REACT_APP_TELEGRAM_LINK; // "https://t.me/+nSeKpMWH0dI5N2Mx"
+    
+    let telegramURL = inviteLink;
+
+    if (inviteLink.includes("t.me/+")) {
+      // Это инвайт-ссылка на канал
+      const inviteCode = inviteLink.split("+")[1];
+      telegramURL = `tg://join?invite=${inviteCode}`;
+    } else if (inviteLink.includes("t.me/")) {
+      const username = inviteLink.split("t.me/")[1];
+      telegramURL = `tg://resolve?domain=${username}`;
+    }
+
+    window.location.href = telegramURL;
+  }}
                 >
                     Subscribe
                 </button>
