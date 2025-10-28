@@ -25,11 +25,6 @@ export default function UpdateCard({ onClose }) {
             <div className="update-buttons">
                 <button 
                     className="amount-submit-button subscribe-update-button"
-                    // onClick={() => window.open(process.env.REACT_APP_TELEGRAM_LINK, "_blank")}
-                    // onClick={() => {
-                    //     const telegramLink = process.env.REACT_APP_TELEGRAM_LINK;
-                    //     window.location.href = telegramLink;
-                    // }}
                     onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
                 >
                     Subscribe
