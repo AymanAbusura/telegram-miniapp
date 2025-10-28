@@ -33,7 +33,6 @@ export default function UpgradeLevel({ onClose }) {
                 </div>
                 <button 
                     className="amount-submit-button subscribe-update-button"
-                    // onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
                     onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
                 >
                     Subscribe
