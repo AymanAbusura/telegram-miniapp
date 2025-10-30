@@ -1,836 +1,192 @@
-// import { useState, useEffect } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import coinImg from "../assets/coin.webp";
-// import { ChevronRight, ArrowUp } from "lucide-react";
-// import MenuBar from "./MenuBar";
-// import useBalance from "../hooks/useBalance";
-// import AnimatedModal from "../components/AnimatedModal";
-// import WithdrawForm from "../components/WithdrawForm";
-// import UpdateCard from "../components/UpdateCard";
-
-// import texts from "../data/texts.json";
-
-// export default function Home() {
-//     const content = texts.home;
-    
-//     const [currentTab, setCurrentTab] = useState("Home");
-
-//     const [balance, setBalance] = useBalance();
-//     const [energy, setEnergy] = useState(30);
-//     const maxEnergy = 30;
-//     const [floatingTexts, setFloatingTexts] = useState([]);
-
-//     const [showWithdrawForm, setShowWithdrawForm] = useState(false);
-//     const [withdrawAmount, setWithdrawAmount] = useState("");
-//     const [errorMessage, setErrorMessage] = useState("");
-
-//     const [showUpdatesCard, setShowUpdatesCard] = useState(false);
-
-//     useEffect(() => {
-//         localStorage.setItem("balance", balance.toFixed(2));
-//     }, [balance]);
-
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
-//         }, 30000);
-//         return () => clearInterval(interval);
-//     }, []);
-
-//     const handleCoinClick = () => {
-//         if (energy > 0) {
-//             setBalance((prev) => prev + 0.05);
-//             setEnergy((prev) => prev - 1);
-
-//             const id = Math.random().toString(36).substr(2, 9);
-//             setFloatingTexts((prev) => [
-//                 ...prev,
-//                 { id, text: content.floatingText },
-//             ]);
-
-//             setTimeout(() => {
-//                 setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
-//             }, 1000);
-//         }
-//     };
-
-//     const handleWithdrawSubmit = () => {
-//         const amount = parseFloat(withdrawAmount);
-
-//         if (isNaN(amount)) {
-//             setErrorMessage(content.withdraw.invalidNumberError);
-//             return;
-//         }
-
-//         if (amount < 200000) {
-//             setErrorMessage(content.withdraw.minAmountError);
-//             return;
-//         }
-
-//         if (amount > balance) {
-//             setErrorMessage(content.withdraw.notEnoughMoneyError);
-//             return;
-//         }
-
-//         setBalance((prev) => prev - amount);
-//         setShowWithdrawForm(false);
-//         setErrorMessage("");
-//         alert(content.withdraw.successMessage.replace("{{amount}}", amount));
-//     };
-
-//     useEffect(() => {
-//         document.body.classList.add("no-scroll");
-//         return () => document.body.classList.remove("no-scroll");
-//     }, []);
-
-//     return (
-//         <div className="home-container">
-//             <div className="home-header">
-//                 <div className="withdraw-box">
-//                     <button
-//                         className="withdraw-button"
-//                         onClick={() => setShowWithdrawForm(true)}
-//                     >
-//                         <span className="withdraw-icon">
-//                             <ArrowUp size={18} style={{ color: "white" }} />
-//                         </span>
-//                         {content.withdraw.button}
-//                     </button>
-//                 </div>
-//             </div>
-
-//             <AnimatedModal
-//                 isOpen={showWithdrawForm}
-//                 onClose={() => setShowWithdrawForm(false)}
-//                 from="top"
-//                 wrapperClass="withdraw-form-container"
-//             >
-//                 <WithdrawForm
-//                     withdrawAmount={withdrawAmount}
-//                     setWithdrawAmount={setWithdrawAmount}
-//                     handleWithdrawSubmit={handleWithdrawSubmit}
-//                     errorMessage={errorMessage}
-//                 />
-//             </AnimatedModal>
-
-//             <AnimatedModal
-//                 isOpen={showUpdatesCard}
-//                 onClose={() => setShowUpdatesCard(false)}
-//                 from="bottom"
-//                 wrapperClass="updates-card-container"
-//             >
-//                 <UpdateCard onClose={() => setShowUpdatesCard(false)} />
-//             </AnimatedModal>
-
-//             <div className="balance-section" style={{ position: "relative" }}>
-//                 <h1 className="balance">
-//                     {balance.toFixed(2)}{" "}
-//                     <span className="home-currency">
-//                         {content.balance.currency}
-//                     </span>
-//                 </h1>
-
-//                 <AnimatePresence>
-//                     {floatingTexts.map((ft) => (
-//                         <motion.div
-//                             key={ft.id}
-//                             initial={{ opacity: 1, y: 0 }}
-//                             animate={{ opacity: 0, y: -50 }}
-//                             exit={{ opacity: 0 }}
-//                             transition={{ duration: 1 }}
-//                             style={{
-//                                 position: "absolute",
-//                                 bottom: "150px",
-//                                 left: "50%",
-//                                 transform: "translateX(-50%)",
-//                                 color: "white",
-//                                 fontSize: "42px",
-//                                 fontWeight: "900",
-//                                 pointerEvents: "none",
-//                                 zIndex: 10,
-//                             }}
-//                         >
-//                             {ft.text}
-//                         </motion.div>
-//                     ))}
-//                 </AnimatePresence>
-
-//                 <motion.img
-//                     src={coinImg}
-//                     alt="Coin"
-//                     className="home-coin"
-//                     onClick={handleCoinClick}
-//                     whileTap={{ scale: 1.2 }}
-//                 />
-//             </div>
-
-//             <div>
-//                 <div className="energy-section">
-//                     <div className="energy-info">
-//                         ⚡ {energy}/{maxEnergy}
-//                     </div>
-//                     <button
-//                         className="updates-btn"
-//                         onClick={() => setShowUpdatesCard(true)}
-//                     >
-//                         {content.updates.button}
-//                         <ChevronRight size={18} />
-//                     </button>
-//                 </div>
-
-//                 <div className="energy-bar">
-//                     <div
-//                         className="energy-fill"
-//                         style={{ width: `${(energy / maxEnergy) * 100}%` }}
-//                     ></div>
-//                 </div>
-//             </div>
-
-//             <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-//         </div>
-//     );
-// }
-
-// import { useState, useEffect } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import coinImg from "../assets/coin.webp";
-// import { ChevronRight, ArrowUp } from "lucide-react";
-// import MenuBar from "./MenuBar";
-// import useBalance from "../hooks/useBalance";
-
-// import AnimatedModal from "../components/AnimatedModal";
-// import WithdrawForm from "../components/WithdrawForm";
-// import UpdateCard from "../components/UpdateCard";
-
-// import texts from "../data/texts.json";
-
-// export default function Home() {
-//     const content = texts.home;
-
-//     const [currentTab, setCurrentTab] = useState("Home");
-
-//     const [balance, setBalance] = useBalance();
-//     const [energy, setEnergy] = useState(30);
-//     const [maxEnergy, setMaxEnergy] = useState(30);
-//     const [floatingTexts, setFloatingTexts] = useState([]);
-
-//     const [showWithdrawForm, setShowWithdrawForm] = useState(false);
-//     const [withdrawAmount, setWithdrawAmount] = useState("");
-//     const [errorMessage, setErrorMessage] = useState("");
-
-//     const [showUpdatesCard, setShowUpdatesCard] = useState(false);
-
-//     useEffect(() => {
-//         localStorage.setItem("balance", balance.toFixed(2));
-//     }, [balance]);
-
-//     useEffect(() => {
-//         const savedMax = localStorage.getItem("maxEnergy");
-//         if (savedMax) {
-//             setMaxEnergy(Number(savedMax));
-//             setEnergy(Number(savedMax));
-//         }
-//     }, []);
-
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
-//         }, 30000);
-//         return () => clearInterval(interval);
-//     }, [maxEnergy]);
-
-//     const handleCoinClick = () => {
-//         if (energy > 0) {
-//             setBalance((prev) => prev + 0.05);
-//             setEnergy((prev) => prev - 1);
-
-//             const id = Math.random().toString(36).substr(2, 9);
-//             setFloatingTexts((prev) => [...prev, { id, text: "+0.05" }]);
-
-//             setTimeout(() => {
-//                 setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
-//             }, 1000);
-//         }
-//     };
-
-//     const handleWithdrawSubmit = () => {
-//         const amount = parseFloat(withdrawAmount);
-
-//         if (isNaN(amount)) {
-//             setErrorMessage(content.withdraw.invalidNumberError);
-//             return;
-//         }
-
-//         if (amount < 200000) {
-//             setErrorMessage(content.withdraw.minAmountError);
-//             return;
-//         }
-
-//         if (amount > balance) {
-//             setErrorMessage(content.withdraw.notEnoughMoneyError);
-//             return;
-//         }
-
-//         setBalance((prev) => prev - amount);
-//         setShowWithdrawForm(false);
-//         setErrorMessage("");
-//         alert(`Withdrawal successful: $${amount}`);
-//     };
-
-//     useEffect(() => {
-//         document.body.classList.add("no-scroll");
-//         return () => document.body.classList.remove("no-scroll");
-//     }, []);
-
-//     useEffect(() => {
-//         const handleEnergyBoost = (e) => {
-//             const newEnergy = e.detail;
-//             setMaxEnergy(newEnergy);
-//             setEnergy(newEnergy);
-//             localStorage.setItem("maxEnergy", newEnergy);
-//         };
-
-//         window.addEventListener("energyBoost", handleEnergyBoost);
-//         return () => window.removeEventListener("energyBoost", handleEnergyBoost);
-//     }, []);
-
-//     return (
-//         <div className="home-container">
-//             <div className="home-header">
-//                 <div className="withdraw-box">
-//                     <button className="withdraw-button" onClick={() => setShowWithdrawForm(true)}>
-//                         <span className="withdraw-icon">
-//                             <ArrowUp size={18} style={{ color: "white" }} />
-//                         </span>
-//                         {content.withdraw.button}
-//                     </button>
-//                 </div>
-//             </div>
-
-//             <AnimatedModal
-//                 isOpen={showWithdrawForm}
-//                 onClose={() => setShowWithdrawForm(false)}
-//                 from="top"
-//                 wrapperClass="withdraw-form-container"
-//             >
-//                 <WithdrawForm
-//                     withdrawAmount={withdrawAmount}
-//                     setWithdrawAmount={setWithdrawAmount}
-//                     handleWithdrawSubmit={handleWithdrawSubmit}
-//                     errorMessage={errorMessage}
-//                 />
-//             </AnimatedModal>
-            
-//             <AnimatedModal
-//                 isOpen={showUpdatesCard}
-//                 onClose={() => setShowUpdatesCard(false)}
-//                 from="bottom"
-//                 wrapperClass="updates-card-container"
-//             >
-//                 <UpdateCard onClose={() => setShowUpdatesCard(false)} />
-//             </AnimatedModal>
-
-//             <div className="balance-section" style={{ position: "relative" }}>
-//                 <h1 className="balance">
-//                     {balance.toFixed(2)} <span className="home-currency">$</span>
-//                 </h1>
-
-//                 <AnimatePresence>
-//                     {floatingTexts.map((ft) => (
-//                         <motion.div
-//                             key={ft.id}
-//                             initial={{ opacity: 1, y: 0 }}
-//                             animate={{ opacity: 0, y: -50 }}
-//                             exit={{ opacity: 0 }}
-//                             transition={{ duration: 1 }}
-//                             style={{
-//                                 position: "absolute",
-//                                 bottom: "150px",
-//                                 left: "50%",
-//                                 transform: "translateX(-50%)",
-//                                 color: "white",
-//                                 fontSize: "42px",
-//                                 fontWeight: "900",
-//                                 pointerEvents: "none",
-//                                 zIndex: 10,
-//                             }}
-//                         >
-//                             {ft.text}
-//                         </motion.div>
-//                     ))}
-//                 </AnimatePresence>
-
-//                 <motion.img
-//                     src={coinImg}
-//                     alt="Coin"
-//                     className="home-coin"
-//                     onClick={handleCoinClick}
-//                     whileTap={{ scale: 1.2 }}
-//                 />
-//             </div>
-
-//             <div>
-//                 <div className="energy-section">
-//                     <div className="energy-info">⚡ {energy}/{maxEnergy}</div>
-//                     <button className="updates-btn" onClick={() => setShowUpdatesCard(true)}>
-//                         🚀 Updates
-//                         <ChevronRight size={18} />
-//                     </button>
-//                 </div>
-
-//                 <div className="energy-bar">
-//                     <div
-//                         className="energy-fill"
-//                         style={{ width: `${(energy / maxEnergy) * 100}%` }}
-//                     ></div>
-//                 </div>
-//             </div>
-            
-//             <div>
-//                 <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-//             </div>
-//         </div>
-//     );
-// }
-
-// import { useState, useEffect } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import coinImg from "../assets/coin.webp";
-// import { ChevronRight, ArrowUp } from "lucide-react";
-// import MenuBar from "./MenuBar";
-// import useBalance from "../hooks/useBalance";
-
-// import AnimatedModal from "../components/AnimatedModal";
-// import WithdrawForm from "../components/WithdrawForm";
-// import UpdateCard from "../components/UpdateCard";
-
-// import texts from "../data/texts.json";
-
-// export default function Home() {
-//   const content = texts.home;
-
-//   const [currentTab, setCurrentTab] = useState("Home");
-
-//   const [balance, setBalance] = useBalance();
-//   const [energy, setEnergy] = useState(30);
-//   const [maxEnergy, setMaxEnergy] = useState(30);
-//   const [floatingTexts, setFloatingTexts] = useState([]);
-
-//   const [showWithdrawForm, setShowWithdrawForm] = useState(false);
-//   const [withdrawAmount, setWithdrawAmount] = useState("");
-//   const [errorMessage, setErrorMessage] = useState("");
-
-//   const [showUpdatesCard, setShowUpdatesCard] = useState(false);
-
-//   // Load balance from localStorage
-//   useEffect(() => {
-//     localStorage.setItem("balance", balance.toFixed(2));
-//   }, [balance]);
-
-//   // Load maxEnergy from localStorage
-//   useEffect(() => {
-//     const savedMax = localStorage.getItem("maxEnergy");
-//     if (savedMax) {
-//       setMaxEnergy(Number(savedMax));
-//       setEnergy(Number(savedMax));
-//     }
-//   }, []);
-
-//   // Regenerate energy over time
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
-//     }, 30000); // every 30 seconds
-//     return () => clearInterval(interval);
-//   }, [maxEnergy]);
-
-//   // Listen for energy boost from UpdateCard
-//   useEffect(() => {
-//     const handleEnergyBoost = (e) => {
-//       console.log("Energy boost received:", e.detail);
-//       const newEnergy = e.detail;
-//       setMaxEnergy(newEnergy);
-//       setEnergy(newEnergy);
-//       localStorage.setItem("maxEnergy", newEnergy);
-//     };
-
-//     window.addEventListener("energyBoost", handleEnergyBoost);
-//     return () => window.removeEventListener("energyBoost", handleEnergyBoost);
-//   }, []);
-
-//   // Prevent body scroll while in app
-//   useEffect(() => {
-//     document.body.classList.add("no-scroll");
-//     return () => document.body.classList.remove("no-scroll");
-//   }, []);
-
-//   // Handle clicking on coin
-//   const handleCoinClick = () => {
-//     if (energy > 0) {
-//       setBalance((prev) => prev + 0.05);
-//       setEnergy((prev) => prev - 1);
-
-//       const id = Math.random().toString(36).substr(2, 9);
-//       setFloatingTexts((prev) => [...prev, { id, text: "+0.05" }]);
-
-//       setTimeout(() => {
-//         setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
-//       }, 1000);
-//     }
-//   };
-
-//   // Handle Withdraw Form submission
-//   const handleWithdrawSubmit = () => {
-//     const amount = parseFloat(withdrawAmount);
-
-//     if (isNaN(amount)) {
-//       setErrorMessage(content.withdraw.invalidNumberError);
-//       return;
-//     }
-
-//     if (amount < 200000) {
-//       setErrorMessage(content.withdraw.minAmountError);
-//       return;
-//     }
-
-//     if (amount > balance) {
-//       setErrorMessage(content.withdraw.notEnoughMoneyError);
-//       return;
-//     }
-
-//     setBalance((prev) => prev - amount);
-//     setShowWithdrawForm(false);
-//     setErrorMessage("");
-//     alert(`Withdrawal successful: $${amount}`);
-//   };
-
-//   return (
-//     <div className="home-container">
-//       {/* Header with Withdraw button */}
-//       <div className="home-header">
-//         <div className="withdraw-box">
-//           <button
-//             className="withdraw-button"
-//             onClick={() => setShowWithdrawForm(true)}
-//           >
-//             <span className="withdraw-icon">
-//               <ArrowUp size={18} style={{ color: "white" }} />
-//             </span>
-//             {content.withdraw.button}
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Withdraw Modal */}
-//       <AnimatedModal
-//         isOpen={showWithdrawForm}
-//         onClose={() => setShowWithdrawForm(false)}
-//         from="top"
-//         wrapperClass="withdraw-form-container"
-//       >
-//         <WithdrawForm
-//           withdrawAmount={withdrawAmount}
-//           setWithdrawAmount={setWithdrawAmount}
-//           handleWithdrawSubmit={handleWithdrawSubmit}
-//           errorMessage={errorMessage}
-//         />
-//       </AnimatedModal>
-
-//       {/* Update Card Modal */}
-//       <AnimatedModal
-//         isOpen={showUpdatesCard}
-//         onClose={() => setShowUpdatesCard(false)}
-//         from="bottom"
-//         wrapperClass="updates-card-container"
-//       >
-//         <UpdateCard onClose={() => setShowUpdatesCard(false)} />
-//       </AnimatedModal>
-
-//       {/* Balance Display */}
-//       <div className="balance-section" style={{ position: "relative" }}>
-//         <h1 className="balance">
-//           {balance.toFixed(2)} <span className="home-currency">$</span>
-//         </h1>
-
-//         {/* Floating Text Animation */}
-//         <AnimatePresence>
-//           {floatingTexts.map((ft) => (
-//             <motion.div
-//               key={ft.id}
-//               initial={{ opacity: 1, y: 0 }}
-//               animate={{ opacity: 0, y: -50 }}
-//               exit={{ opacity: 0 }}
-//               transition={{ duration: 1 }}
-//               style={{
-//                 position: "absolute",
-//                 bottom: "150px",
-//                 left: "50%",
-//                 transform: "translateX(-50%)",
-//                 color: "white",
-//                 fontSize: "42px",
-//                 fontWeight: "900",
-//                 pointerEvents: "none",
-//                 zIndex: 10,
-//               }}
-//             >
-//               {ft.text}
-//             </motion.div>
-//           ))}
-//         </AnimatePresence>
-
-//         {/* Coin */}
-//         <motion.img
-//           src={coinImg}
-//           alt="Coin"
-//           className="home-coin"
-//           onClick={handleCoinClick}
-//           whileTap={{ scale: 1.2 }}
-//         />
-//       </div>
-
-//       {/* Energy Section */}
-//       <div className="energy-section">
-//         <div className="energy-info">⚡ {energy}/{maxEnergy}</div>
-//         <button
-//           className="updates-btn"
-//           onClick={() => setShowUpdatesCard(true)}
-//         >
-//           🚀 Updates
-//           <ChevronRight size={18} />
-//         </button>
-//       </div>
-
-//       <div className="energy-bar">
-//         <div
-//           className="energy-fill"
-//           style={{ width: `${(energy / maxEnergy) * 100}%` }}
-//         ></div>
-//       </div>
-
-//       {/* Menu Bar */}
-//       <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-//     </div>
-//   );
-// }
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import coinImg from "../assets/coin.webp";
 import { ChevronRight, ArrowUp } from "lucide-react";
 import MenuBar from "./MenuBar";
 import useBalance from "../hooks/useBalance";
-
 import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
-import UpdateCard from "../components/UpdateCard"; // Ensure this import path is correct
+import UpdateCard from "../components/UpdateCard";
 
 import texts from "../data/texts.json";
 
 export default function Home() {
-  const content = texts.home;
+    const content = texts.home;
+    
+    const [currentTab, setCurrentTab] = useState("Home");
 
-  const [currentTab, setCurrentTab] = useState("Home");
+    const [balance, setBalance] = useBalance();
+    const [energy, setEnergy] = useState(30);
+    const maxEnergy = 30;
+    const [floatingTexts, setFloatingTexts] = useState([]);
 
-  const [balance, setBalance] = useBalance();
-  const [energy, setEnergy] = useState(30);
-  const [maxEnergy, setMaxEnergy] = useState(30);
-  const [floatingTexts, setFloatingTexts] = useState([]);
+    const [showWithdrawForm, setShowWithdrawForm] = useState(false);
+    const [withdrawAmount, setWithdrawAmount] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
-  const [showWithdrawForm, setShowWithdrawForm] = useState(false);
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+    const [showUpdatesCard, setShowUpdatesCard] = useState(false);
 
-  const [showUpdatesCard, setShowUpdatesCard] = useState(false);
+    useEffect(() => {
+        localStorage.setItem("balance", balance.toFixed(2));
+    }, [balance]);
 
-  // Load balance from localStorage
-  useEffect(() => {
-    localStorage.setItem("balance", balance.toFixed(2));
-  }, [balance]);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
+        }, 30000);
+        return () => clearInterval(interval);
+    }, []);
 
-  // Load maxEnergy from localStorage and set initial energy
-  useEffect(() => {
-    const savedMax = localStorage.getItem("maxEnergy");
-    if (savedMax) {
-      setMaxEnergy(Number(savedMax));
-      setEnergy(Number(savedMax));
-    }
-    // Set initial energy if it was a new session and no max was saved
-    else {
-        setEnergy(30); 
-        setMaxEnergy(30);
-    }
-  }, []);
+    const handleCoinClick = () => {
+        if (energy > 0) {
+            setBalance((prev) => prev + 0.05);
+            setEnergy((prev) => prev - 1);
 
-  // Regenerate energy over time
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
-    }, 30000); // every 30 seconds
-    return () => clearInterval(interval);
-  }, [maxEnergy]);
+            const id = Math.random().toString(36).substr(2, 9);
+            setFloatingTexts((prev) => [
+                ...prev,
+                { id, text: content.floatingText },
+            ]);
 
-  // Listen for energy boost from UpdateCard
-  useEffect(() => {
-    const handleEnergyBoost = (e) => {
-      const newEnergy = e.detail;
-      // Only update if the new energy is greater than the current max
-      if (newEnergy > maxEnergy) { 
-          console.log(`Energy boost received: setting maxEnergy to ${newEnergy}`);
-          setMaxEnergy(newEnergy);
-          setEnergy(newEnergy); // Fill up the new max energy
-          localStorage.setItem("maxEnergy", newEnergy);
-      } else {
-          console.log("Energy boost ignored: Current max is already equal or higher.");
-      }
+            setTimeout(() => {
+                setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
+            }, 1000);
+        }
     };
 
-    // 🔑 Key listener for the subscription success event
-    window.addEventListener("energyBoost", handleEnergyBoost);
-    return () => window.removeEventListener("energyBoost", handleEnergyBoost);
-  }, [maxEnergy]); // Depend on maxEnergy to allow comparison inside the handler
+    const handleWithdrawSubmit = () => {
+        const amount = parseFloat(withdrawAmount);
 
-  // Prevent body scroll while in app
-  useEffect(() => {
-    document.body.classList.add("no-scroll");
-    return () => document.body.classList.remove("no-scroll");
-  }, []);
+        if (isNaN(amount)) {
+            setErrorMessage(content.withdraw.invalidNumberError);
+            return;
+        }
 
-  // Handle clicking on coin
-  const handleCoinClick = () => {
-    if (energy > 0) {
-      setBalance((prev) => prev + 0.05);
-      setEnergy((prev) => prev - 1);
+        if (amount < 200000) {
+            setErrorMessage(content.withdraw.minAmountError);
+            return;
+        }
 
-      const id = Math.random().toString(36).substr(2, 9);
-      setFloatingTexts((prev) => [...prev, { id, text: "+0.05" }]);
+        if (amount > balance) {
+            setErrorMessage(content.withdraw.notEnoughMoneyError);
+            return;
+        }
 
-      setTimeout(() => {
-        setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
-      }, 1000);
-    }
-  };
+        setBalance((prev) => prev - amount);
+        setShowWithdrawForm(false);
+        setErrorMessage("");
+        alert(content.withdraw.successMessage.replace("{{amount}}", amount));
+    };
 
-  // Handle Withdraw Form submission (simplified for this context)
-  const handleWithdrawSubmit = () => {
-    const amount = parseFloat(withdrawAmount);
-    // ... (Your existing withdrawal logic)
-    
-    if (isNaN(amount) || amount < 200000 || amount > balance) {
-        setErrorMessage(content.withdraw.minAmountError); // Replace with your actual error logic
-        return;
-    }
+    useEffect(() => {
+        document.body.classList.add("no-scroll");
+        return () => document.body.classList.remove("no-scroll");
+    }, []);
 
-    setBalance((prev) => prev - amount);
-    setShowWithdrawForm(false);
-    setErrorMessage("");
-    window.Telegram.WebApp.showAlert(`Withdrawal successful: $${amount}`);
-  };
+    return (
+        <div className="home-container">
+            <div className="home-header">
+                <div className="withdraw-box">
+                    <button
+                        className="withdraw-button"
+                        onClick={() => setShowWithdrawForm(true)}
+                    >
+                        <span className="withdraw-icon">
+                            <ArrowUp size={18} style={{ color: "white" }} />
+                        </span>
+                        {content.withdraw.button}
+                    </button>
+                </div>
+            </div>
 
-  return (
-    <div className="home-container">
-      {/* Header with Withdraw button */}
-      <div className="home-header">
-        <div className="withdraw-box">
-          <button
-            className="withdraw-button"
-            onClick={() => setShowWithdrawForm(true)}
-          >
-            <span className="withdraw-icon">
-              <ArrowUp size={18} style={{ color: "white" }} />
-            </span>
-            {content.withdraw.button}
-          </button>
-        </div>
-      </div>
-
-      {/* Withdraw Modal */}
-      <AnimatedModal
-        isOpen={showWithdrawForm}
-        onClose={() => setShowWithdrawForm(false)}
-        from="top"
-        wrapperClass="withdraw-form-container"
-      >
-        <WithdrawForm
-          withdrawAmount={withdrawAmount}
-          setWithdrawAmount={setWithdrawAmount}
-          handleWithdrawSubmit={handleWithdrawSubmit}
-          errorMessage={errorMessage}
-        />
-      </AnimatedModal>
-
-      {/* Update Card Modal */}
-      <AnimatedModal
-        isOpen={showUpdatesCard}
-        onClose={() => setShowUpdatesCard(false)}
-        from="bottom"
-        wrapperClass="updates-card-container"
-      >
-        <UpdateCard onClose={() => setShowUpdatesCard(false)} currentMaxEnergy={maxEnergy} />
-      </AnimatedModal>
-
-      {/* Balance Display */}
-      <div className="balance-section" style={{ position: "relative" }}>
-        <h1 className="balance">
-          {balance.toFixed(2)} <span className="home-currency">$</span>
-        </h1>
-
-        {/* Floating Text Animation */}
-        <AnimatePresence>
-          {floatingTexts.map((ft) => (
-            <motion.div
-              key={ft.id}
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 0, y: -50 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1 }}
-              style={{
-                position: "absolute",
-                bottom: "150px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                color: "white",
-                fontSize: "42px",
-                fontWeight: "900",
-                pointerEvents: "none",
-                zIndex: 10,
-              }}
+            <AnimatedModal
+                isOpen={showWithdrawForm}
+                onClose={() => setShowWithdrawForm(false)}
+                from="top"
+                wrapperClass="withdraw-form-container"
             >
-              {ft.text}
-            </motion.div>
-          ))}
-        </AnimatePresence>
+                <WithdrawForm
+                    withdrawAmount={withdrawAmount}
+                    setWithdrawAmount={setWithdrawAmount}
+                    handleWithdrawSubmit={handleWithdrawSubmit}
+                    errorMessage={errorMessage}
+                />
+            </AnimatedModal>
 
-        {/* Coin */}
-        <motion.img
-          src={coinImg}
-          alt="Coin"
-          className="home-coin"
-          onClick={handleCoinClick}
-          whileTap={{ scale: 1.2 }}
-        />
-      </div>
+            <AnimatedModal
+                isOpen={showUpdatesCard}
+                onClose={() => setShowUpdatesCard(false)}
+                from="bottom"
+                wrapperClass="updates-card-container"
+            >
+                <UpdateCard onClose={() => setShowUpdatesCard(false)} />
+            </AnimatedModal>
 
-      {/* Energy Section */}
-      <div className="energy-section">
-        <div className="energy-info">⚡ {energy}/{maxEnergy}</div>
-        <button
-          className="updates-btn"
-          onClick={() => setShowUpdatesCard(true)}
-        >
-          🚀 Updates
-          <ChevronRight size={18} />
-        </button>
-      </div>
+            <div className="balance-section" style={{ position: "relative" }}>
+                <h1 className="balance">
+                    {balance.toFixed(2)}{" "}
+                    <span className="home-currency">
+                        {content.balance.currency}
+                    </span>
+                </h1>
 
-      <div className="energy-bar">
-        <div
-          className="energy-fill"
-          style={{ width: `${(energy / maxEnergy) * 100}%` }}
-        ></div>
-      </div>
+                <AnimatePresence>
+                    {floatingTexts.map((ft) => (
+                        <motion.div
+                            key={ft.id}
+                            initial={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 0, y: -50 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1 }}
+                            style={{
+                                position: "absolute",
+                                bottom: "150px",
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                color: "white",
+                                fontSize: "42px",
+                                fontWeight: "900",
+                                pointerEvents: "none",
+                                zIndex: 10,
+                            }}
+                        >
+                            {ft.text}
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
 
-      {/* Menu Bar */}
-      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-    </div>
-  );
+                <motion.img
+                    src={coinImg}
+                    alt="Coin"
+                    className="home-coin"
+                    onClick={handleCoinClick}
+                    whileTap={{ scale: 1.2 }}
+                />
+            </div>
+
+            <div>
+                <div className="energy-section">
+                    <div className="energy-info">
+                        ⚡ {energy}/{maxEnergy}
+                    </div>
+                    <button
+                        className="updates-btn"
+                        onClick={() => setShowUpdatesCard(true)}
+                    >
+                        {content.updates.button}
+                        <ChevronRight size={18} />
+                    </button>
+                </div>
+
+                <div className="energy-bar">
+                    <div
+                        className="energy-fill"
+                        style={{ width: `${(energy / maxEnergy) * 100}%` }}
+                    ></div>
+                </div>
+            </div>
+
+            <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        </div>
+    );
 }
