@@ -12,6 +12,8 @@ import texts from "../data/texts.json";
 
 export default function Home() {
     const content = texts.home;
+
+    const [subscribed, setSubscribed] = useState(false);
     
     const [currentTab, setCurrentTab] = useState("Home");
 
@@ -36,6 +38,15 @@ export default function Home() {
         }, 30000);
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        if (subscribed) {
+            setEnergy(60);
+        } else {
+            setEnergy(30);
+        }
+    }, [subscribed]);
+
 
     const handleCoinClick = () => {
         if (energy > 0) {
@@ -119,7 +130,7 @@ export default function Home() {
                 from="bottom"
                 wrapperClass="updates-card-container"
             >
-                <UpdateCard onClose={() => setShowUpdatesCard(false)} />
+                <UpdateCard onClose={() => setShowUpdatesCard(false)} setSubscribed={setSubscribed} />
             </AnimatedModal>
 
             <div className="balance-section" style={{ position: "relative" }}>
