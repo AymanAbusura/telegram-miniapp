@@ -18,8 +18,9 @@ export default function Home() {
     const [currentTab, setCurrentTab] = useState("Home");
 
     const [balance, setBalance] = useBalance();
+    const [maxEnergy, setMaxEnergy] = useState(30);
     const [energy, setEnergy] = useState(30);
-    const maxEnergy = 30;
+
     const [floatingTexts, setFloatingTexts] = useState([]);
 
     const [showWithdrawForm, setShowWithdrawForm] = useState(false);
@@ -41,8 +42,10 @@ export default function Home() {
 
     useEffect(() => {
         if (subscribed) {
+            setMaxEnergy(60);
             setEnergy(60);
         } else {
+            setMaxEnergy(30);
             setEnergy(30);
         }
     }, [subscribed]);
