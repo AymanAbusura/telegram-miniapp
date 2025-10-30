@@ -3,7 +3,6 @@ const { Telegraf } = require("telegraf");
 require("dotenv").config();
 const fs = require("fs");
 const cors = require("cors");
-const fetch = require("node-fetch");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -16,44 +15,31 @@ const content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBLINK = process.env.WEB_LINK;
 const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
-const KEITARO_POSTBACK_URL = process.env.KEITARO_POSTBACK_URL;
 
 const bot = new Telegraf(TOKEN);
 
-const userSubs = {};
-
 bot.start((ctx) => {
-    const startPayload = ctx.message.text.split(" ")[1];
-    const subid = startPayload || null;
-
-    if (subid) {
-        userSubs[ctx.from.id] = subid;
-    }
-
-    const appUrl = `${WEBLINK}?userId=${ctx.from.id}${subid ? `&subid=${subid}` : ""}`;
-
-    ctx.reply(content.welcomeMessage, {
-        reply_markup: {
-            inline_keyboard: [
-                [{ text: content.goToMiniAppButton, web_app: { url: appUrl } }],
-            ],
-        },
-    });
+  ctx.reply(content.welcomeMessage, {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: content.goToMiniAppButton, web_app: { url: WEBLINK } }],
+      ],
+    },
+  });
 });
 
 bot.launch().then(() => console.log("Telegram bot launched ✅"));
 
 app.get("/check-subscription/:userId", async (req, res) => {
-    const userId = req.params.userId;
-
-    try {
-        const member = await bot.telegram.getChatMember(CHANNEL_ID, userId);
-        const isSubscribed = ["creator", "administrator", "member"].includes(member.status);
-        res.json({ subscribed: isSubscribed });
-    } catch (err) {
-        console.error("Error checking subscription:", err.description || err.message);
-        res.json({ subscribed: false, error: "Bot cannot access member list. Make sure bot is admin." });
-    }
+  const userId = req.params.userId;
+  try {
+    const member = await bot.telegram.getChatMember(CHANNEL_ID, userId);
+    const isSubscribed = ["creator", "administrator", "member"].includes(member.status);
+    res.json({ subscribed: isSubscribed });
+  } catch (err) {
+    console.error("Error checking subscription:", err.description || err.message);
+    res.json({ subscribed: false, error: "Bot cannot access member list. Make sure bot is admin." });
+  }
 });
 
 app.get("/channel-info", async (req, res) => {
@@ -77,23 +63,6 @@ app.get("/channel-info", async (req, res) => {
     } catch (err) {
         console.error("Error fetching channel info:", err);
         res.status(500).json({ error: "Failed to fetch channel info" });
-    }
-});
-
-
-app.post("/postback", async (req, res) => {
-    const { subid, event } = req.body;
-
-    if (!subid) return res.status(400).json({ error: "Missing subid" });
-
-    try {
-        const postbackUrl = `${KEITARO_POSTBACK_URL}?cid=${encodeURIComponent(subid)}&event=${encodeURIComponent(event)}`;
-        await fetch(postbackUrl);
-        console.log(`✅ Postback sent: ${postbackUrl}`);
-        res.json({ success: true });
-    } catch (err) {
-        console.error("❌ Error sending postback:", err);
-        res.status(500).json({ error: "Failed to send postback" });
     }
 });
 

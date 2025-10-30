@@ -10,7 +10,7 @@ import UpdateCard from "../components/UpdateCard";
 
 import texts from "../data/texts.json";
 
-export default function Home( { subid } ) {
+export default function Home() {
     const content = texts.home;
 
     const [subscribed, setSubscribed] = useState(false);
@@ -128,7 +128,7 @@ export default function Home( { subid } ) {
                 from="bottom"
                 wrapperClass="updates-card-container"
             >
-                <UpdateCard setSubscribed={setSubscribed} subid={subid} />
+                <UpdateCard setSubscribed={setSubscribed} />
             </AnimatedModal>
 
             <div className="balance-section" style={{ position: "relative" }}>

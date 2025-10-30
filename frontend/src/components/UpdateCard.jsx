@@ -1,98 +1,3 @@
-// import { useState, useEffect } from "react";
-// import { ChevronRight } from "lucide-react";
-// import { openTelegram } from '../utils/openTelegram';
-// import texts from "../data/texts.json";
-
-// export default function UpdateCard({ setSubscribed }) {
-//     const content = texts.updateCard;
-
-//     const [checking, setChecking] = useState(false);
-//     const [channelInfo, setChannelInfo] = useState({
-//         title: "",
-//         description: "",
-//         photo: "",
-//     });
-
-//     const handleCheckSubscription = async () => {
-//         setChecking(true);
-
-//         try {
-//             const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-//             if (!userId) return alert(content.alert_message);
-
-//             const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
-//             const data = await res.json();
-
-//             setSubscribed(data.subscribed);
-//             alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
-//         } catch (err) {
-//             console.error(err);
-//             alert(content.error_message);
-//         } finally {
-//             setChecking(false);
-//         }
-//     };
-
-//     const handleSubscribeClick = () => {
-//         openTelegram(process.env.REACT_APP_TELEGRAM_LINK);
-
-//         setTimeout(() => {
-//             handleCheckSubscription();
-//         }, 5000);
-//     };
-
-//     useEffect(() => {
-//         const fetchChannelInfo = async () => {
-//             try {
-//                 const res = await fetch(`${process.env.REACT_APP_API_URL}/channel-info`);
-//                 const data = await res.json();
-//                 setChannelInfo(data);
-//             } catch (err) {
-//                 console.error(content.channel_info_error, err);
-//             }
-//         };
-//         fetchChannelInfo();
-//     }, []);
-
-//     return (
-//         <>
-//             <img
-//                 src={channelInfo.photo}
-//                 alt="Channel Profile"
-//                 className="channel-profile-image"
-//             />
-
-//             <div className="card-header">
-//                 <h2>{channelInfo.title}</h2>
-//                 <p>{channelInfo.description}</p>
-//             </div>
-
-//             <div className="energy-update-card">
-//                 <div className="energy-info-update">{content.energy_min}</div>
-//                 <ChevronRight size={20} />
-//                 <div className="energy-info-update">{content.energy_max}</div>
-//             </div>
-
-//             <div className="update-buttons">
-//                 <button 
-//                     className="amount-submit-button subscribe-update-button"
-//                     onClick={handleSubscribeClick}
-//                 >
-//                     {content.subscribe}
-//                 </button>
-
-//                 <button
-//                     className="amount-submit-button check-update-button"
-//                     onClick={handleCheckSubscription}
-//                     disabled={checking}
-//                 >
-//                     {checking ? `${content.Checking}` : `${content.check}`}
-//                 </button>
-//             </div>
-//         </>
-//     );
-// }
-
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { openTelegram } from '../utils/openTelegram';
@@ -119,15 +24,7 @@ export default function UpdateCard({ setSubscribed }) {
             const data = await res.json();
 
             setSubscribed(data.subscribed);
-            alert(data.subscribed ? content.subscribed : content.notSubscribed);
-
-            if (subid && data.subscribed) {
-                await fetch(`${process.env.REACT_APP_API_URL}/postback`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ subid, event: "subscribed" }),
-                });
-            }
+            alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
         } catch (err) {
             console.error(err);
             alert(content.error_message);
@@ -136,29 +33,12 @@ export default function UpdateCard({ setSubscribed }) {
         }
     };
 
-    const handleSubscribeClick = async () => {
-        try {
-            let channelLink = process.env.REACT_APP_TELEGRAM_LINK;
-            if (subid) {
-                channelLink += `?subid=${encodeURIComponent(subid)}`;
-            }
+    const handleSubscribeClick = () => {
+        openTelegram(process.env.REACT_APP_TELEGRAM_LINK);
 
-            openTelegram(channelLink);
-
-            if (subid) {
-                await fetch(`${process.env.REACT_APP_API_URL}/postback`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ subid, event: "clicked_subscribe" }),
-                });
-            }
-
-            setTimeout(() => {
-                handleCheckSubscription();
-            }, 5000);
-        } catch (err) {
-            console.error(err);
-        }
+        setTimeout(() => {
+            handleCheckSubscription();
+        }, 5000);
     };
 
     useEffect(() => {
@@ -176,13 +56,11 @@ export default function UpdateCard({ setSubscribed }) {
 
     return (
         <>
-            {channelInfo.photo && (
-                <img
-                    src={channelInfo.photo}
-                    alt="Channel Profile"
-                    className="channel-profile-image"
-                />
-            )}
+            <img
+                src={channelInfo.photo}
+                alt="Channel Profile"
+                className="channel-profile-image"
+            />
 
             <div className="card-header">
                 <h2>{channelInfo.title}</h2>
@@ -199,7 +77,6 @@ export default function UpdateCard({ setSubscribed }) {
                 <button 
                     className="amount-submit-button subscribe-update-button"
                     onClick={handleSubscribeClick}
-                    disabled={checking || subscribed}
                 >
                     {content.subscribe}
                 </button>
@@ -209,7 +86,7 @@ export default function UpdateCard({ setSubscribed }) {
                     onClick={handleCheckSubscription}
                     disabled={checking}
                 >
-                    {checking ? content.Checking : content.check}
+                    {checking ? `${content.Checking}` : `${content.check}`}
                 </button>
             </div>
         </>
