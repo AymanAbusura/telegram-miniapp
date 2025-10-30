@@ -16,8 +16,18 @@ export default function WelcomeCard() {
           alt="Coin"
           className="welcome-coin"
           initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 100 }}
+          animate={{
+            scale: 1,
+            y: [0, -20, 0],
+          }}
+          transition={{
+            scale: { type: "spring", stiffness: 100 },
+            y: {
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            },
+          }}
         />
 
         <h1 className="welcome-header">
