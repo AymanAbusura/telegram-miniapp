@@ -42,10 +42,20 @@ app.get("/check-subscription/:userId", async (req, res) => {
   }
 });
 
+let cachedChannelInfo = null;
+let lastFetched = 0;
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour (adjust if needed)
+
 app.get("/channel-info", async (req, res) => {
+  const now = Date.now();
+
+  // ✅ If cache exists and is still valid — return it instantly
+  if (cachedChannelInfo && now - lastFetched < CACHE_DURATION) {
+    return res.json(cachedChannelInfo);
+  }
+
   try {
     const chat = await bot.telegram.getChat(process.env.TELEGRAM_CHANNEL_ID);
-
     const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
     let photoUrl = null;
 
@@ -54,16 +64,42 @@ app.get("/channel-info", async (req, res) => {
       photoUrl = file.href;
     }
 
-    res.json({
+    cachedChannelInfo = {
       title: chat.title,
       description: chat.description || content.emptyDescription,
       photo: photoUrl,
-    });
+    };
+
+    lastFetched = now;
+
+    res.json(cachedChannelInfo);
   } catch (err) {
     console.error("Error fetching channel info:", err);
     res.status(500).json({ error: "Failed to fetch channel info" });
   }
 });
+
+(async () => {
+  try {
+    const chat = await bot.telegram.getChat(process.env.TELEGRAM_CHANNEL_ID);
+    const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
+    let photoUrl = null;
+    if (fileId) {
+      const file = await bot.telegram.getFileLink(fileId);
+      photoUrl = file.href;
+    }
+    cachedChannelInfo = {
+      title: chat.title,
+      description: chat.description || content.emptyDescription,
+      photo: photoUrl,
+    };
+    lastFetched = Date.now();
+    console.log("✅ Channel info preloaded at startup");
+  } catch (err) {
+    console.warn("⚠️ Failed to preload channel info:", err.message);
+  }
+})();
+
 
 app.get("/", (req, res) => res.send("Bot is running ✅"));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
