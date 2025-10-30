@@ -3,14 +3,13 @@ const axios = require("axios");
 const { Telegraf } = require("telegraf");
 require("dotenv").config();
 const fs = require("fs");
-const cors = require("cors"); // 🔑 Import CORS
+const cors = require("cors");
 
 const app = express();
 
 // --- CORS CONFIGURATION FIX ---
-// This middleware explicitly allows requests only from your Vercel frontend URL.
 app.use(cors({
-    origin: process.env.WEB_LINK, // The Vercel URL: https://telegram-miniapp-ten-steel.vercel.app/
+    origin: process.env.WEB_LINK,
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
 }));
@@ -25,7 +24,6 @@ const RENDER_URL = process.env.RENDER_URL;
 
 const bot = new Telegraf(TOKEN);
 
-// Ensure text.json exists and is readable
 let content = {};
 try {
   content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
@@ -67,14 +65,13 @@ if (RENDER_URL) {
 
 // Subscription check endpoint //
 app.post("/checkSubscription", async (req, res) => {
-  const { userId, channelUsername } = req.body; // channelUsername is the numeric string (e.g., "-100...")
+  const { userId, channelUsername } = req.body; 
 
   if (!userId || !channelUsername) {
     return res.status(400).json({ success: false, message: "Missing userId or channelUsername parameter." });
   }
 
   try {
-    // Use the channelUsername string directly for the private chat ID
     const chatId = channelUsername; 
     const user_id = String(userId);
 
@@ -85,12 +82,10 @@ app.post("/checkSubscription", async (req, res) => {
 
     const result = response.data;
     if (!result.ok) {
-        // Log the API error response for debugging
         console.error("Telegram API response not OK for getChatMember:", result);
         return res.status(500).json({ success: false, message: "Telegram API error. Is the bot an admin in the channel?" });
     }
 
-    // Check if the user's status is one of the "member" statuses
     const isMember = ["member", "administrator", "creator"].includes(result.result.status);
     
     return res.json({ 
@@ -98,12 +93,22 @@ app.post("/checkSubscription", async (req, res) => {
         message: isMember ? "✅ Subscribed! Energy increased." : "❌ Not subscribed. Please join the channel." 
     });
   } catch (error) {
-    const errorData = error.response?.data || {};
-    // Log the error description from Telegram API if available
-    console.error("Subscription check error:", errorData.description || error.message);
+    // 🔑 IMPROVED ERROR HANDLING: Safely check for the Telegram API error data
+    const telegramError = error.response?.data?.description;
+    
+    if (telegramError) {
+        console.error("Telegram API Error:", telegramError);
+        return res.status(400).json({ // Return 400 for a Telegram error, not 500
+            success: false, 
+            message: `Telegram Error: ${telegramError}` 
+        });
+    }
+
+    // Fallback for network issues or unexpected errors
+    console.error("Critical Server Error:", error.message);
     return res.status(500).json({ 
         success: false, 
-        message: `Error checking subscription: ${errorData.description || "Load failed/Internal Server Error"}` 
+        message: `Internal Server Error: ${error.message}` 
     });
   }
 });

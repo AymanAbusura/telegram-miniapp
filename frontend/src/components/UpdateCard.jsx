@@ -145,13 +145,12 @@ import channelProfile from "../assets/channel_profile.webp";
 import { openTelegram } from "../utils/openTelegram";
 import texts from "../data/texts.json";
 
-// Added currentMaxEnergy prop to better control the energy boost logic
 export default function UpdateCard({ onClose, currentMaxEnergy }) {
     const content = texts.updateCard;
 
     const [checking, setChecking] = useState(false);
     const [message, setMessage] = useState("");
-    const BOOST_AMOUNT = 60; // Define the target max energy
+    const BOOST_AMOUNT = 60;
 
     const handleCheckSubscription = async () => {
         setChecking(true);
@@ -165,14 +164,12 @@ export default function UpdateCard({ onClose, currentMaxEnergy }) {
                 return;
             }
 
-            // Check if the boost has already been applied
             if (currentMaxEnergy >= BOOST_AMOUNT) {
                  setMessage("Maximum energy already increased! Enjoy.");
                  setChecking(false);
                  return;
             }
 
-            // Use the API URL from the frontend .env
             const apiUrl = process.env.REACT_APP_API_URL;
             if (!apiUrl) {
                 setMessage("Configuration error: REACT_APP_API_URL is missing.");
@@ -197,12 +194,9 @@ export default function UpdateCard({ onClose, currentMaxEnergy }) {
                 data = { success: false, message: `Invalid server response. Text: ${text.substring(0, 100)}...` };
             }
 
-            // Set the message based on the response
             setMessage(data.message || (data.success ? `✅ Subscribed! Max energy is now ${BOOST_AMOUNT}.` : "❌ Not subscribed. Please subscribe first."));
 
-            // 🔑 Key logic: Dispatch event on success AND if boost is needed
             if (data.success && currentMaxEnergy < BOOST_AMOUNT) {
-                // Dispatch event to Home.jsx to update energy to 60/60
                 window.dispatchEvent(new CustomEvent("energyBoost", { detail: BOOST_AMOUNT })); 
             }
         } catch (err) {
@@ -228,7 +222,7 @@ export default function UpdateCard({ onClose, currentMaxEnergy }) {
             <div className="energy-update-card">
                 <div className="energy-info-update">{content.energy_min}</div>
                 <ChevronRight size={20} />
-                <div className="energy-info-update">**{BOOST_AMOUNT}**</div> {/* Explicitly show the boosted amount */}
+                <div className="energy-info-update">{content.energy_max}</div>
             </div>
 
             <div className="update-buttons">
