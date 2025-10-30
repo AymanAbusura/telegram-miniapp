@@ -3,17 +3,13 @@ import { FaHome, FaUser } from "react-icons/fa";
 import { FaBagShopping } from "react-icons/fa6";
 import { TrendingUp } from "lucide-react";
 
-import texts from "../data/texts.json";
-
 export default function MenuBar({ currentTab, setCurrentTab }) {
   const navigate = useNavigate();
-  const content = texts.menu;
-
   const menuItems = [
-    { name: content.home, icon: <FaHome />, path: "/Home" },
-    { name: content.benefit, icon: <FaBagShopping />, path: "/Benefit" },
-    { name: content.ranking, icon: <TrendingUp />, path: "/Ranking" },
-    { name: content.profile, icon: <FaUser />, path: "/Profile" },
+    { name: "Home", icon: <FaHome />, path: "/Home" },
+    { name: "Benefit", icon: <FaBagShopping />, path: "/Benefit" },
+    { name: "Ranking", icon: <TrendingUp />, path: "/Ranking" },
+    { name: "Profile", icon: <FaUser />, path: "/Profile" },
   ];
 
   return (

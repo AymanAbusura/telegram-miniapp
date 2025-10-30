@@ -4,15 +4,12 @@
 // import { ChevronRight, ArrowUp } from "lucide-react";
 // import MenuBar from "./MenuBar";
 // import useBalance from "../hooks/useBalance";
+
 // import AnimatedModal from "../components/AnimatedModal";
 // import WithdrawForm from "../components/WithdrawForm";
 // import UpdateCard from "../components/UpdateCard";
 
-// import texts from "../data/texts.json";
-
 // export default function Home() {
-//     const content = texts.home;
-    
 //     const [currentTab, setCurrentTab] = useState("Home");
 
 //     const [balance, setBalance] = useBalance();
@@ -43,10 +40,7 @@
 //             setEnergy((prev) => prev - 1);
 
 //             const id = Math.random().toString(36).substr(2, 9);
-//             setFloatingTexts((prev) => [
-//                 ...prev,
-//                 { id, text: content.floatingText },
-//             ]);
+//             setFloatingTexts((prev) => [...prev, { id, text: "+0.05" }]);
 
 //             setTimeout(() => {
 //                 setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
@@ -58,43 +52,43 @@
 //         const amount = parseFloat(withdrawAmount);
 
 //         if (isNaN(amount)) {
-//             setErrorMessage(content.withdraw.invalidNumberError);
+//             setErrorMessage("Please enter a valid number.");
 //             return;
 //         }
 
 //         if (amount < 200000) {
-//             setErrorMessage(content.withdraw.minAmountError);
+//             setErrorMessage("Minimum payout amount 200000$");
 //             return;
 //         }
 
 //         if (amount > balance) {
-//             setErrorMessage(content.withdraw.notEnoughMoneyError);
+//             setErrorMessage("You don't have enough money.");
 //             return;
 //         }
 
 //         setBalance((prev) => prev - amount);
 //         setShowWithdrawForm(false);
 //         setErrorMessage("");
-//         alert(content.withdraw.successMessage.replace("{{amount}}", amount));
+//         alert(`Withdrawal successful: $${amount}`);
 //     };
 
 //     useEffect(() => {
 //         document.body.classList.add("no-scroll");
-//         return () => document.body.classList.remove("no-scroll");
+
+//         return () => {
+//         document.body.classList.remove("no-scroll");
+//         };
 //     }, []);
 
 //     return (
 //         <div className="home-container">
 //             <div className="home-header">
 //                 <div className="withdraw-box">
-//                     <button
-//                         className="withdraw-button"
-//                         onClick={() => setShowWithdrawForm(true)}
-//                     >
+//                     <button className="withdraw-button" onClick={() => setShowWithdrawForm(true)}>
 //                         <span className="withdraw-icon">
 //                             <ArrowUp size={18} style={{ color: "white" }} />
 //                         </span>
-//                         {content.withdraw.button}
+//                         Withdraw
 //                     </button>
 //                 </div>
 //             </div>
@@ -112,7 +106,7 @@
 //                     errorMessage={errorMessage}
 //                 />
 //             </AnimatedModal>
-
+            
 //             <AnimatedModal
 //                 isOpen={showUpdatesCard}
 //                 onClose={() => setShowUpdatesCard(false)}
@@ -124,10 +118,7 @@
 
 //             <div className="balance-section" style={{ position: "relative" }}>
 //                 <h1 className="balance">
-//                     {balance.toFixed(2)}{" "}
-//                     <span className="home-currency">
-//                         {content.balance.currency}
-//                     </span>
+//                     {balance.toFixed(2)} <span className="home-currency">$</span>
 //                 </h1>
 
 //                 <AnimatePresence>
@@ -166,14 +157,9 @@
 
 //             <div>
 //                 <div className="energy-section">
-//                     <div className="energy-info">
-//                         ⚡ {energy}/{maxEnergy}
-//                     </div>
-//                     <button
-//                         className="updates-btn"
-//                         onClick={() => setShowUpdatesCard(true)}
-//                     >
-//                         {content.updates.button}
+//                     <div className="energy-info">⚡ {energy}/{maxEnergy}</div>
+//                     <button className="updates-btn" onClick={() => setShowUpdatesCard(true)}>
+//                         🚀 Updates
 //                         <ChevronRight size={18} />
 //                     </button>
 //                 </div>
@@ -202,11 +188,7 @@ import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
 import UpdateCard from "../components/UpdateCard";
 
-import texts from "../data/texts.json";
-
 export default function Home() {
-    const content = texts.home;
-
     const [currentTab, setCurrentTab] = useState("Home");
 
     const [balance, setBalance] = useBalance();
@@ -224,6 +206,7 @@ export default function Home() {
         localStorage.setItem("balance", balance.toFixed(2));
     }, [balance]);
 
+    // 🔋 restore energy from localStorage
     useEffect(() => {
         const savedMax = localStorage.getItem("maxEnergy");
         if (savedMax) {
@@ -232,6 +215,7 @@ export default function Home() {
         }
     }, []);
 
+    // ⚡ regenerate energy every 30 seconds
     useEffect(() => {
         const interval = setInterval(() => {
             setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
@@ -239,6 +223,7 @@ export default function Home() {
         return () => clearInterval(interval);
     }, [maxEnergy]);
 
+    // 💰 click on coin
     const handleCoinClick = () => {
         if (energy > 0) {
             setBalance((prev) => prev + 0.05);
@@ -257,17 +242,17 @@ export default function Home() {
         const amount = parseFloat(withdrawAmount);
 
         if (isNaN(amount)) {
-            setErrorMessage(content.withdraw.invalidNumberError);
+            setErrorMessage("Please enter a valid number.");
             return;
         }
 
         if (amount < 200000) {
-            setErrorMessage(content.withdraw.minAmountError);
+            setErrorMessage("Minimum payout amount 200000$");
             return;
         }
 
         if (amount > balance) {
-            setErrorMessage(content.withdraw.notEnoughMoneyError);
+            setErrorMessage("You don't have enough money.");
             return;
         }
 
@@ -282,6 +267,7 @@ export default function Home() {
         return () => document.body.classList.remove("no-scroll");
     }, []);
 
+    // ⚡ listen to boost event from UpdateCard
     useEffect(() => {
         const handleEnergyBoost = (e) => {
             const newEnergy = e.detail;
@@ -302,7 +288,7 @@ export default function Home() {
                         <span className="withdraw-icon">
                             <ArrowUp size={18} style={{ color: "white" }} />
                         </span>
-                        {content.withdraw.button}
+                        Withdraw
                     </button>
                 </div>
             </div>

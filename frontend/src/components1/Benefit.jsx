@@ -8,11 +8,7 @@ import AnimatedModal from "../components/AnimatedModal";
 import UpdateCard from "../components/UpdateCard";
 import UpgradeLevel from "../components/UpgradeLevel";
 
-import texts from "../data/texts.json";
-
 export default function Benefit() {
-  const content = texts.benefit;
-
   const [currentTab, setCurrentTab] = useState("Benefit");
   const [balance] = useBalance();
 
@@ -28,7 +24,7 @@ export default function Benefit() {
 
   return (
     <div className="benefit-container">
-      <h2 className="benefit-title">{content.credit_balance}</h2>
+      <h2 className="benefit-title">Credit Balance</h2>
 
       <div className="benefit-balance">
         <div className="benefit-balance-1">
@@ -47,16 +43,16 @@ export default function Benefit() {
             <div className="notification-badge">x2</div>
           </div>
           <div className="energy-text">
-            <p className="energy-title">{content.double_energy_title}</p>
+            <p className="energy-title">Double your energy</p>
             <p className="energy-desc">
-              {content.double_energy_desc}
+              Increase your max energy and earn money faster!
             </p>
           </div>
           <ChevronRight size={40} />
         </div>
       </div>
 
-      <h3 className="benefits-title">{content.benefits_title}</h3>
+      <h3 className="benefits-title">Benefits</h3>
       <hr className="benefits-divider" />
       <div 
         className="benefit-box"
@@ -66,12 +62,12 @@ export default function Benefit() {
           <div className="benefit-icon">👆</div>
           <div className="benefit-info">
             <div className="benefit-title-1">
-              {content.upgrade_label}
-              <div className="level-badge">{content.upgrade_level_badge}</div>
+              Upgrade
+              <div className="level-badge">5 LVL</div>
             </div>
             <p className="benefit-level">
               <img src={coinImg} alt="Coin" className="benefit-level-coin" />
-              {content.upgrade_level_info}
+              5 / Level
             </p>
           </div>
         </div>

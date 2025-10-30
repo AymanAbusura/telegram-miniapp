@@ -1,11 +1,8 @@
 // import { ChevronRight } from "lucide-react";
 // import channelProfile from "../assets/channel_profile.webp";
 // import { openTelegram } from '../utils/openTelegram';
-// import texts from "../data/texts.json";
 
 // export default function UpdateCard({ onClose }) {
-//     const content = texts.updateCard;
-
 //     return (
 //         <>
 //             <img
@@ -15,14 +12,14 @@
 //             />
 
 //             <div className="card-header">
-//                 <h2>{content.title}</h2>
-//                 <p>{content.description}</p>
+//                 <h2>Crypto Expert</h2>
+//                 <p>Subscribe to the sponsor’s channel and win a bonus!</p>
 //             </div>
 
 //             <div className="energy-update-card">
-//                 <div className="energy-info-update">{content.energy_min}</div>
+//                 <div className="energy-info-update">⚡ 30</div>
 //                 <ChevronRight size={20} />
-//                 <div className="energy-info-update">{content.energy_max}</div>
+//                 <div className="energy-info-update">⚡ 60</div>
 //             </div>
 
 //             <div className="update-buttons">
@@ -30,14 +27,14 @@
 //                     className="amount-submit-button subscribe-update-button"
 //                     onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
 //                 >
-//                     {content.subscribe}
+//                     Subscribe
 //                 </button>
 
 //                 <button
 //                     onClick={onClose}
 //                     className="amount-submit-button check-update-button"
 //                 >
-//                     {content.check}
+//                     Check it
 //                 </button>
 //             </div>
 //         </>
@@ -48,11 +45,8 @@ import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import channelProfile from "../assets/channel_profile.webp";
 import { openTelegram } from "../utils/openTelegram";
-import texts from "../data/texts.json";
 
 export default function UpdateCard({ onClose }) {
-    const content = texts.updateCard;
-    
     const [checking, setChecking] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -101,14 +95,14 @@ export default function UpdateCard({ onClose }) {
             />
 
             <div className="card-header">
-                <h2>{content.title}</h2>
-                <p>{content.description}</p>
+                <h2>Crypto Expert</h2>
+                <p>Subscribe to the sponsor’s channel and win a bonus!</p>
             </div>
 
             <div className="energy-update-card">
-                <div className="energy-info-update">{content.energy_min}</div>
+                <div className="energy-info-update">⚡ 30</div>
                 <ChevronRight size={20} />
-                <div className="energy-info-update">{content.energy_max}</div>
+                <div className="energy-info-update">⚡ 60</div>
             </div>
 
             <div className="update-buttons">
@@ -116,7 +110,7 @@ export default function UpdateCard({ onClose }) {
                     className="amount-submit-button subscribe-update-button"
                     onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
                 >
-                    {content.subscribe}
+                    Subscribe
                 </button>
 
                 <button
@@ -124,7 +118,7 @@ export default function UpdateCard({ onClose }) {
                     className="amount-submit-button check-update-button"
                     disabled={checking}
                 >
-                    {checking ? "Checking..." : `${content.check}`}
+                    {checking ? "Checking..." : "Check it"}
                 </button>
             </div>
 

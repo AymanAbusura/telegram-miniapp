@@ -2,13 +2,9 @@ import { useState } from "react";
 import useBalance from "../hooks/useBalance";
 import MenuBar from "./MenuBar";
 
-import texts from "../data/texts.json";
-
 export default function Ranking() {
   const [currentTab, setCurrentTab] = useState("Ranking");
   const [balance] = useBalance();
-
-  const content = texts.ranking;
 
   const leaderboard = [
     { rank: 1, name: "Pourya Moradi", balance: 0 },
@@ -34,22 +30,22 @@ export default function Ranking() {
 
   return (
     <div className="ranking-container">
-      <h2 className="ranking-title">{content.title}</h2>
+      <h2 className="ranking-title">Ranking</h2>
 
       <div className="my-rank">
         <div className={getRankClass(myRank)}>{myRank}</div>
-        <div className="rank-name">{content.my_rank_label}</div>
-        <div className="rank-balance">{balance.toFixed(2)} {content.currency}</div>
+        <div className="rank-name">You</div>
+        <div className="rank-balance">{balance.toFixed(2)} $</div>
       </div>
 
-      <h3 className="leaderboard-title">{content.leaderboard_title}</h3>
+      <h3 className="leaderboard-title">Top Players</h3>
 
       <div className="leaderboard-list">
         {leaderboard.map((player) => (
           <div key={player.rank} className="leaderboard-item">
             <div className={getRankClass(player.rank)}>{player.rank}</div>
             <div className="player-name">{player.name}</div>
-            <div className="player-balance">{player.balance} {content.currency}</div>
+            <div className="player-balance">{player.balance} $</div>
           </div>
         ))}
       </div>

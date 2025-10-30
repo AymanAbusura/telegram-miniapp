@@ -1,30 +1,39 @@
+import texts from "../data/texts.json";
+
 export default function WithdrawForm({
-    withdrawAmount,
-    setWithdrawAmount,
-    handleWithdrawSubmit,
-    errorMessage
+  withdrawAmount,
+  setWithdrawAmount,
+  handleWithdrawSubmit,
+  errorMessage,
 }) {
-    return (
-        <>
-            <h2>Withdrawal</h2>
+  const content = texts.withdrawForm;
 
-            <input
-                type="number"
-                placeholder="Amount ($)"
-                value={withdrawAmount}
-                onChange={(e) => setWithdrawAmount(e.target.value)}
-                className="amount-input"
-            />
+  return (
+    <>
+      <h2>{content.title}</h2>
 
-            {errorMessage && (
-                <div style={{ color: "red", fontWeight: "bold" }}>
-                    {errorMessage}
-                </div>
-            )}
+      <input
+        type="number"
+        placeholder={content.inputPlaceholder}
+        value={withdrawAmount}
+        onChange={(e) => setWithdrawAmount(e.target.value)}
+        className="amount-input"
+      />
 
-            <button onClick={handleWithdrawSubmit} className="amount-submit-button">
-                Ready
-            </button>
-        </>
-    );
+      {errorMessage && (
+        <div
+          style={{
+            color: content.errorColor,
+            fontWeight: content.errorWeight,
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
+
+      <button onClick={handleWithdrawSubmit} className="amount-submit-button">
+        {content.buttonText}
+      </button>
+    </>
+  );
 }

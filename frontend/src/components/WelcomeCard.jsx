@@ -2,8 +2,11 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import coinImg from "../assets/coin.webp";
 
+import texts from "../data/texts.json";
+
 export default function WelcomeCard() {
   const navigate = useNavigate();
+  const content = texts.welcomeCard;
 
   return (
     <div className="welcome-container">
@@ -18,42 +21,28 @@ export default function WelcomeCard() {
         />
 
         <h1 className="welcome-header">
-          Welcome to the <span className="highlight">Easy Money</span> Bot!
+          {content.headerStart}{" "}
+          <span className="highlight">{content.highlight}</span>{" "}
+          {content.headerEnd}
         </h1>
-        <p className="subtext">
-          Play, collect, and win real money — then withdraw it directly to your bank account!
-        </p>
+        <p className="subtext">{content.subtext}</p>
 
         <div>
           <div className="info-list">
-            <div className="info-item">
-              <span className="icon">✨</span>
-              <div>
-                <p className="info-title">Tap the screen</p>
-                <p className="info-desc">Tap the screen to collect as much money as you can.</p>
+            {content.infoList.map((item, index) => (
+              <div className="info-item" key={index}>
+                <span className="icon">{item.icon}</span>
+                <div>
+                  <p className="info-title">{item.title}</p>
+                  <p className="info-desc">{item.desc}</p>
+                </div>
               </div>
-            </div>
-
-            <div className="info-item">
-              <span className="icon">🤝</span>
-              <div>
-                <p className="info-title">Invite your friends</p>
-                <p className="info-desc">Invite your friends and win real money together!</p>
-              </div>
-            </div>
-
-            <div className="info-item">
-              <span className="icon">💪</span>
-              <div>
-                <p className="info-title">Buy boosts and upgrades</p>
-                <p className="info-desc">Upgrade your game and earn even more!</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
         <button className="start-button" onClick={() => navigate("/Home")}>
-          Start Winning
+          {content.buttonText}
         </button>
       </div>
     </div>

@@ -7,11 +7,7 @@ import { ArrowUp, ArrowLeftRight } from 'lucide-react';
 import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
 
-import texts from "../data/texts.json";
-
 const Profile = () => {
-  const content = texts.profile;
-
   const [currentTab, setCurrentTab] = useState("Profile");
   const [balance, setBalance] = useBalance();
 
@@ -53,24 +49,24 @@ const Profile = () => {
     const amount = parseFloat(withdrawAmount);
 
     if (isNaN(amount)) {
-      setErrorMessage(content.withdraw_error_invalid);
+      setErrorMessage("Please enter a valid number.");
       return;
     }
 
     if (amount < 200000) {
-      setErrorMessage(content.withdraw_error_minimum);
+      setErrorMessage("Minimum payout amount 200000$");
       return;
     }
 
     if (amount > balance) {
-      setErrorMessage(content.withdraw_error_balance);
+      setErrorMessage("You don't have enough money.");
       return;
     }
 
     setBalance(prev => prev - amount);
     setShowWithdrawForm(false);
     setErrorMessage("");
-    alert(`${content.withdraw_success}${amount}`);
+    alert(`Withdrawal successful: $${amount}`);
   };
 
   useEffect(() => {
@@ -85,12 +81,12 @@ const Profile = () => {
       <header className="profile-header">
         <div className="user-info">
           <h1 className="user-name">{userName}</h1>
-          <p className="start-date">{content.started_playing} {startDate}</p>
+          <p className="start-date">Started playing on – {startDate}</p>
         </div>
       </header>
 
       <section className="balance-section">
-        <p className="section-title">{content.funds_in_balance}</p>
+        <p className="section-title">Funds in balance</p>
         <div className="balance-display">
           <span className="balance-amount">{balance.toFixed(2)}</span>
           <img src={coinImg} alt="Coin" className="profile-coin" />
@@ -101,11 +97,11 @@ const Profile = () => {
       <div className="action-buttons-wrapper">
         <div className="action-button primary-action" onClick={handleWithdrawClick}>
           <ArrowUp className="button-icon" />
-          <span className="button-text">{content.withdrawal_button}</span>
+          <span className="button-text">Withdrawal</span>
         </div>
         <div className="action-button secondary-action disabled">
           <ArrowLeftRight className="button-icon secondary-icon" />
-          <span className="button-text secondary-text">{content.exchange_button}</span>
+          <span className="button-text secondary-text">Exchange</span>
         </div>
       </div>
 
@@ -124,15 +120,15 @@ const Profile = () => {
       </AnimatedModal>
 
       <section className="statistics-section">
-        <h2 className="section-title statistics-title">{content.statistics_title}</h2>
+        <h2 className="section-title statistics-title">Statistical data</h2>
         <div className="stats-card">
           <div className="stats-content">
             <div className='fingerup-icon'>👆</div>
             <div>
-              <span className="stats-text">{content.refresh_label}</span>
+              <span className="stats-text">Refresh</span>
               <div className="level-info">
                 <img src={coinImg} alt="Coin" className="benefit-level-coin" />
-                {content.level_info}
+                5 / Level
               </div>
             </div>
           </div>
