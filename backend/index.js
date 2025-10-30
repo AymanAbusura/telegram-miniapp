@@ -13,7 +13,8 @@ const WEBLINK = process.env.WEB_LINK;
 const RENDER_URL = process.env.RENDER_URL;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb', type: '*/*' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors({
     origin: WEBLINK,
     methods: ['GET', 'POST'],
