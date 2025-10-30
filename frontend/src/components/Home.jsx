@@ -385,8 +385,10 @@ export default function Home() {
                     ></div>
                 </div>
             </div>
-
-            <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+            
+            <div>
+                <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+            </div>
         </div>
     );
 }
