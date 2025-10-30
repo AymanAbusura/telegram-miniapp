@@ -30,6 +30,8 @@ bot.start((ctx) => {
 
 bot.launch().then(() => console.log("Telegram bot launched ✅"));
 
+bot.on("message", (ctx) => console.log(ctx.chat));
+
 // PUBLIC CHANNEL
 // app.get("/check-subscription/:userId", async (req, res) => {
 //   const userId = req.params.userId;
