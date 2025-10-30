@@ -25,11 +25,12 @@ bot.start((ctx) =>
 
 bot.on("message", (ctx) => {
   console.log("📢 Chat info:", {
-    title: ctx.chat.title,
+    title: ctx.chat.title || "No title (private chat)",
     id: ctx.chat.id,
     type: ctx.chat.type,
   });
 });
+
 
 bot.launch();
 
