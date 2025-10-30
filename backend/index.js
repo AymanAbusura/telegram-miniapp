@@ -46,6 +46,12 @@ if (RENDER_URL) {
   app.use(bot.webhookCallback(BOT_PATH));
 }
 
+app.post("/debug", (req, res) => {
+    console.log("Headers:", req.headers);
+    console.log("Body:", req.body);
+    res.json({ ok: true, body: req.body });
+});
+
 app.post("/checkSubscription", async (req, res) => {
   console.log("Incoming body:", req.body);
 
