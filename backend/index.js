@@ -132,19 +132,13 @@ bot.launch().then(() => console.log("Telegram bot launched ✅"));
 
 app.get("/check-subscription/:userId", async (req, res) => {
   const userId = req.params.userId;
-
   try {
     const member = await bot.telegram.getChatMember(CHANNEL_ID, userId);
-
-    // Possible statuses: 'creator', 'administrator', 'member', 'restricted', 'left', 'kicked'
-    const isSubscribed = ["creator", "administrator", "member"].includes(
-      member.status
-    );
-
+    const isSubscribed = ["creator", "administrator", "member"].includes(member.status);
     res.json({ subscribed: isSubscribed });
   } catch (err) {
-    console.error("Error checking subscription:", err.message);
-    res.status(500).json({ error: "Could not check subscription" });
+    console.error("Error checking subscription:", err.description || err.message);
+    res.json({ subscribed: false, error: "Bot cannot access member list. Make sure bot is admin." });
   }
 });
 

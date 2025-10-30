@@ -74,23 +74,39 @@ export default function UpdateCard({ onClose }) {
 
   return (
     <>
-      {/* ...other elements... */}
-      <div className="update-buttons">
-        <button
-          className="amount-submit-button subscribe-update-button"
-          onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
-        >
-          Subscribe
-        </button>
+        <img
+            src={channelProfile}
+            alt="Channel Profile"
+            className="channel-profile-image"
+        />
 
-        <button
-          className="amount-submit-button check-update-button"
-          onClick={handleCheckSubscription}
-          disabled={checking}
-        >
-          {checking ? "Checking..." : "Check"}
-        </button>
-      </div>
+        <div className="card-header">
+            <h2>{content.title}</h2>
+            <p>{content.description}</p>
+        </div>
+
+        <div className="energy-update-card">
+            <div className="energy-info-update">{content.energy_min}</div>
+            <ChevronRight size={20} />
+            <div className="energy-info-update">{content.energy_max}</div>
+        </div>
+
+        <div className="update-buttons">
+            <button 
+                className="amount-submit-button subscribe-update-button"
+                onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
+            >
+                {content.subscribe}
+            </button>
+
+            <button
+                className="amount-submit-button check-update-button"
+                onClick={handleCheckSubscription}
+                disabled={checking}
+            >
+                {checking ? "Checking..." : `${content.check}`}
+            </button>
+        </div>
     </>
   );
 }
