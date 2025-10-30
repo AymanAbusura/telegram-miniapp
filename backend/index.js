@@ -23,12 +23,15 @@ bot.start((ctx) =>
   })
 );
 
-bot.launch();
-
 bot.on("message", (ctx) => {
-  console.log("Channel ID:", ctx.chat.id);
+  console.log("📢 Chat info:", {
+    title: ctx.chat.title,
+    id: ctx.chat.id,
+    type: ctx.chat.type,
+  });
 });
 
+bot.launch();
 
 app.post("/checkSubscription", async (req, res) => {
   const { userId, channelUsername } = req.body;
@@ -38,15 +41,31 @@ app.post("/checkSubscription", async (req, res) => {
   }
 
   try {
+    // Detect private (-100...) vs public channel (@name)
+    const chatId = channelUsername.startsWith("-100")
+      ? channelUsername
+      : `@${channelUsername}`;
+
+    // Telegram API request
     const response = await axios.post(
       `https://api.telegram.org/bot${TOKEN}/getChatMember`,
       {
-        chat_id: `@${channelUsername}`,
+        chat_id: chatId,
         user_id: userId,
       }
     );
 
-    const status = response.data.result.status;
+    const result = response.data;
+
+    if (!result.ok) {
+      console.error("❌ Telegram API Error:", result);
+      return res.status(500).json({
+        success: false,
+        message: "Telegram API returned an error.",
+      });
+    }
+
+    const status = result.result.status;
     const isMember = ["member", "administrator", "creator"].includes(status);
 
     if (isMember) {
@@ -55,7 +74,7 @@ app.post("/checkSubscription", async (req, res) => {
       return res.json({ success: false, message: "User is not subscribed" });
     }
   } catch (error) {
-    console.error("Subscription check error:", error.response?.data || error.message);
+    console.error("🚨 Subscription check error:", error.response?.data || error.message);
     return res.status(500).json({ success: false, message: "Error checking subscription" });
   }
 });
