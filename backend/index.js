@@ -24,6 +24,18 @@ bot.start((ctx) => {
   });
 });
 
+(async () => {
+  const chat = await bot.telegram.getChat("@yourchannelusername");
+  console.log("Private channel ID:", chat.id);
+})();
+
+bot.on("message", (ctx) => {
+  if (ctx.message.forward_from_chat) {
+    console.log("Channel ID:", ctx.message.forward_from_chat.id);
+  }
+});
+
+
 bot.on("message", (ctx) => {
   console.log("📢 Chat info:", {
     title: ctx.chat.title || "No title (private chat)",
