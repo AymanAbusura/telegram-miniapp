@@ -45,68 +45,72 @@
 // }
 
 
-import { useState } from "react";
-import { openTelegram } from "../utils/openTelegram";
+import { ChevronRight } from "lucide-react";
+import channelProfile from "../assets/channel_profile.webp";
+import { openTelegram } from '../utils/openTelegram';
+import texts from "../data/texts.json";
 
 export default function UpdateCard({ onClose }) {
-  const [checking, setChecking] = useState(false);
-  const [subscribed, setSubscribed] = useState(null);
+    const content = texts.updateCard;
 
-  const handleCheckSubscription = async () => {
-    setChecking(true);
+    const [checking, setChecking] = useState(false);
+    const [subscribed, setSubscribed] = useState(null);
 
-    try {
-      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-      if (!userId) return alert("Please open this in Telegram WebApp.");
+    const handleCheckSubscription = async () => {
+        setChecking(true);
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
-      const data = await res.json();
+        try {
+            const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+            if (!userId) return alert("Please open this in Telegram WebApp.");
 
-      setSubscribed(data.subscribed);
-      alert(data.subscribed ? "You are subscribed ✅" : "You are not subscribed ❌");
-    } catch (err) {
-      console.error(err);
-      alert("Error checking subscription.");
-    } finally {
-      setChecking(false);
-    }
-  };
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
+            const data = await res.json();
 
-  return (
-    <>
-        <img
-            src={channelProfile}
-            alt="Channel Profile"
-            className="channel-profile-image"
-        />
+            setSubscribed(data.subscribed);
+            alert(data.subscribed ? "You are subscribed ✅" : "You are not subscribed ❌");
+        } catch (err) {
+            console.error(err);
+            alert("Error checking subscription.");
+        } finally {
+            setChecking(false);
+        }
+    };
 
-        <div className="card-header">
-            <h2>{content.title}</h2>
-            <p>{content.description}</p>
-        </div>
+    return (
+        <>
+            <img
+                src={channelProfile}
+                alt="Channel Profile"
+                className="channel-profile-image"
+            />
 
-        <div className="energy-update-card">
-            <div className="energy-info-update">{content.energy_min}</div>
-            <ChevronRight size={20} />
-            <div className="energy-info-update">{content.energy_max}</div>
-        </div>
+            <div className="card-header">
+                <h2>{content.title}</h2>
+                <p>{content.description}</p>
+            </div>
 
-        <div className="update-buttons">
-            <button 
-                className="amount-submit-button subscribe-update-button"
-                onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
-            >
-                {content.subscribe}
-            </button>
+            <div className="energy-update-card">
+                <div className="energy-info-update">{content.energy_min}</div>
+                <ChevronRight size={20} />
+                <div className="energy-info-update">{content.energy_max}</div>
+            </div>
 
-            <button
-                className="amount-submit-button check-update-button"
-                onClick={handleCheckSubscription}
-                disabled={checking}
-            >
-                {checking ? "Checking..." : `${content.check}`}
-            </button>
-        </div>
-    </>
-  );
+            <div className="update-buttons">
+                <button 
+                    className="amount-submit-button subscribe-update-button"
+                    onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
+                >
+                    {content.subscribe}
+                </button>
+
+                <button
+                    className="amount-submit-button check-update-button"
+                    onClick={handleCheckSubscription}
+                    disabled={checking}
+                >
+                    {checking ? "Checking..." : `${content.check}`}
+                </button>
+            </div>
+        </>
+    );
 }
