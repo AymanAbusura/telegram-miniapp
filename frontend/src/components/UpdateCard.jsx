@@ -1,61 +1,13 @@
-// import { ChevronRight } from "lucide-react";
-// import channelProfile from "../assets/channel_profile.webp";
-// import { openTelegram } from '../utils/openTelegram';
-// import texts from "../data/texts.json";
-
-// export default function UpdateCard({ onClose }) {
-//     const content = texts.updateCard;
-
-//     return (
-//         <>
-//             <img
-//                 src={channelProfile}
-//                 alt="Channel Profile"
-//                 className="channel-profile-image"
-//             />
-
-//             <div className="card-header">
-//                 <h2>{content.title}</h2>
-//                 <p>{content.description}</p>
-//             </div>
-
-//             <div className="energy-update-card">
-//                 <div className="energy-info-update">{content.energy_min}</div>
-//                 <ChevronRight size={20} />
-//                 <div className="energy-info-update">{content.energy_max}</div>
-//             </div>
-
-//             <div className="update-buttons">
-//                 <button 
-//                     className="amount-submit-button subscribe-update-button"
-//                     onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
-//                 >
-//                     {content.subscribe}
-//                 </button>
-
-//                 <button
-//                     onClick={onClose}
-//                     className="amount-submit-button check-update-button"
-//                 >
-//                     {content.check}
-//                 </button>
-//             </div>
-//         </>
-//     );
-// }
-
-
 // import { useState } from "react";
 // import { ChevronRight } from "lucide-react";
 // import channelProfile from "../assets/channel_profile.webp";
 // import { openTelegram } from '../utils/openTelegram';
 // import texts from "../data/texts.json";
 
-// export default function UpdateCard({ onClose }) {
+// export default function UpdateCard({ onClose, setSubscribed }) {
 //     const content = texts.updateCard;
 
 //     const [checking, setChecking] = useState(false);
-//     const [subscribed, setSubscribed] = useState(null);
 
 //     const handleCheckSubscription = async () => {
 //         setChecking(true);
@@ -75,6 +27,14 @@
 //         } finally {
 //             setChecking(false);
 //         }
+//     };
+
+//     const handleSubscribeClick = () => {
+//         openTelegram(process.env.REACT_APP_TELEGRAM_LINK);
+
+//         setTimeout(() => {
+//             handleCheckSubscription();
+//         }, 5000);
 //     };
 
 //     return (
@@ -99,7 +59,7 @@
 //             <div className="update-buttons">
 //                 <button 
 //                     className="amount-submit-button subscribe-update-button"
-//                     onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
+//                     onClick={handleSubscribeClick}
 //                 >
 //                     {content.subscribe}
 //                 </button>
@@ -126,8 +86,17 @@ export default function UpdateCard({ onClose, setSubscribed }) {
     const content = texts.updateCard;
 
     const [checking, setChecking] = useState(false);
+    const [channelImage, setChannelImage] = useState(null);
 
-    // Check subscription from backend
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_API_URL}/channel-photo`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.url) setChannelImage(data.url);
+            })
+            .catch(err => console.error(err));
+    }, []);
+
     const handleCheckSubscription = async () => {
         setChecking(true);
 
@@ -138,7 +107,7 @@ export default function UpdateCard({ onClose, setSubscribed }) {
             const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
             const data = await res.json();
 
-            setSubscribed(data.subscribed); // Update energy in Home
+            setSubscribed(data.subscribed);
             alert(data.subscribed ? "You are subscribed ✅" : "You are not subscribed ❌");
         } catch (err) {
             console.error(err);
@@ -148,21 +117,18 @@ export default function UpdateCard({ onClose, setSubscribed }) {
         }
     };
 
-    // Called when user clicks "Subscribe" button
     const handleSubscribeClick = () => {
-        // Open Telegram channel
         openTelegram(process.env.REACT_APP_TELEGRAM_LINK);
 
-        // Wait a few seconds then check subscription automatically
         setTimeout(() => {
             handleCheckSubscription();
-        }, 5000); // 5 seconds delay (adjust if needed)
+        }, 5000);
     };
 
     return (
         <>
             <img
-                src={channelProfile}
+                src={channelImage || channelProfile}
                 alt="Channel Profile"
                 className="channel-profile-image"
             />

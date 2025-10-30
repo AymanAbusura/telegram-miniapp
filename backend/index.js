@@ -42,5 +42,22 @@ app.get("/check-subscription/:userId", async (req, res) => {
   }
 });
 
+app.get("/channel-photo", async (req, res) => {
+    try {
+        const chat = await bot.telegram.getChat(process.env.TELEGRAM_CHANNEL_ID);
+
+        const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
+
+        if (!fileId) return res.json({ url: null });
+
+        const file = await bot.telegram.getFileLink(fileId);
+
+        res.json({ url: file.href });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ url: null });
+    }
+});
+
 app.get("/", (req, res) => res.send("Bot is running ✅"));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
