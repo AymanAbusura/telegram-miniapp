@@ -3,60 +3,56 @@ const axios = require("axios");
 const { Telegraf } = require("telegraf");
 require("dotenv").config();
 const fs = require("fs");
-const cors = require("cors");
+const cors = require("cors"); 
 
 const app = express();
-
-// --- CORS CONFIGURATION FIX ---
-app.use(cors({
-    origin: process.env.WEB_LINK,
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
-}));
-// ------------------------------
-
-app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBLINK = process.env.WEB_LINK;
 const RENDER_URL = process.env.RENDER_URL;
 
+// 🔑 CRITICAL FIX: Ensure express.json() is applied globally and early to parse the request body
+app.use(express.json()); 
+
+// --- CORS Configuration ---
+// This middleware explicitly allows requests only from your Vercel frontend URL.
+app.use(cors({
+    origin: process.env.WEB_LINK,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+}));
+// --------------------------
+
 const bot = new Telegraf(TOKEN);
 
+// Ensure text.json exists and is readable (Assuming this file is present)
 let content = {};
 try {
+  // Note: fs module might not be available or practical on some hosting environments.
   content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
 } catch (error) {
   console.error("Error reading or parsing text.json. Using fallback messages.", error.message);
+  // Fallback structure if file is missing
+  content = {
+    welcomeMessage: "Welcome! Click the button to launch the Mini App.",
+    goToMiniAppButton: "Launch App"
+  };
 }
 
 bot.start((ctx) => {
-  ctx.reply(content.welcomeMessage || "Welcome! Click the button to launch the Mini App.", {
+  ctx.reply(content.welcomeMessage, {
     reply_markup: {
-      inline_keyboard: [[{ text: content.goToMiniAppButton || "Launch App", web_app: { url: WEBLINK } }]],
+      inline_keyboard: [[{ text: content.goToMiniAppButton, web_app: { url: WEBLINK } }]],
     },
   });
 });
 
-bot.on("message", (ctx) => {
-  if (ctx.message.forward_from_chat) {
-    console.log("Channel ID from forward:", ctx.message.forward_from_chat.id);
-  }
-});
-
-bot.on("message", (ctx) => {
-  console.log("📢 Chat info:", {
-    title: ctx.chat.title || "No title (private chat)",
-    id: ctx.chat.id,
-    type: ctx.chat.type,
-  });
-});
-
-// Webhook setup //
+// Webhook setup (only if RENDER_URL is defined)
 const BOT_PATH = `/bot${TOKEN}`;
 if (RENDER_URL) {
   bot.telegram.setWebhook(`${RENDER_URL}${BOT_PATH}`);
+  // Telegraf webhook handler
   app.use(bot.webhookCallback(BOT_PATH));
 } else {
     console.warn("RENDER_URL not set. Webhook not configured.");
@@ -65,6 +61,13 @@ if (RENDER_URL) {
 
 // Subscription check endpoint //
 app.post("/checkSubscription", async (req, res) => {
+  
+  // 🛡️ Defensive Check: Prevents crash if req.body is undefined
+  if (!req.body) {
+    console.error("Request body is undefined or null. Check middleware placement or client headers.");
+    return res.status(400).json({ success: false, message: "Request body is empty or malformed." });
+  }
+  
   const { userId, channelUsername } = req.body; 
 
   if (!userId || !channelUsername) {
@@ -72,7 +75,7 @@ app.post("/checkSubscription", async (req, res) => {
   }
 
   try {
-    const chatId = channelUsername; 
+    const chatId = channelUsername; // e.g., "-1001344597324"
     const user_id = String(userId);
 
     const response = await axios.get(
@@ -82,33 +85,32 @@ app.post("/checkSubscription", async (req, res) => {
 
     const result = response.data;
     if (!result.ok) {
-        console.error("Telegram API response not OK for getChatMember:", result);
-        return res.status(500).json({ success: false, message: "Telegram API error. Is the bot an admin in the channel?" });
+        console.error("Telegram API response not OK:", result);
+        return res.status(500).json({ success: false, message: "Telegram API reported an error." });
     }
 
     const isMember = ["member", "administrator", "creator"].includes(result.result.status);
     
     return res.json({ 
         success: isMember, 
-        message: isMember ? "✅ Subscribed! Energy increased." : "❌ Not subscribed. Please join the channel." 
+        message: isMember ? "✅ Subscribed! Max energy is now 60." : "❌ Not subscribed. Please join the channel." 
     });
   } catch (error) {
-    // 🔑 IMPROVED ERROR HANDLING: Safely check for the Telegram API error data
-    const telegramError = error.response?.data?.description;
+    const telegramErrorDescription = error.response?.data?.description;
     
-    if (telegramError) {
-        console.error("Telegram API Error:", telegramError);
-        return res.status(400).json({ // Return 400 for a Telegram error, not 500
+    if (telegramErrorDescription) {
+        console.error("Telegram API Error:", telegramErrorDescription);
+        // Returns the clear error like "Bad Request: member list is inaccessible"
+        return res.status(400).json({ 
             success: false, 
-            message: `Telegram Error: ${telegramError}` 
+            message: `Telegram Error: ${telegramErrorDescription}. Make sure the bot is an admin in the channel.` 
         });
     }
 
-    // Fallback for network issues or unexpected errors
-    console.error("Critical Server Error:", error.message);
+    console.error("Critical Server Crash Error:", error.message);
     return res.status(500).json({ 
         success: false, 
-        message: `Internal Server Error: ${error.message}` 
+        message: `Internal Server Error: ${error.message}. Check Render logs.` 
     });
   }
 });
