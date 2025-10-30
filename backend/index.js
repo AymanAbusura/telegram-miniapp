@@ -58,12 +58,15 @@ app.post("/checkSubscription", async (req, res) => {
   }
 
   try {
-    // Determine chat ID
-    const chatId = channelUsername.startsWith("-100")
-      ? channelUsername
-      : `@${channelUsername.replace("@", "")}`;
+    // Determine chatId
+    let chatId;
+    if (channelUsername.startsWith("-100")) {
+      chatId = Number(channelUsername); // Telegram API expects number for private channels
+    } else {
+      chatId = `@${channelUsername.replace("@", "")}`;
+    }
 
-    // Correct GET request
+    // Correct GET request to Telegram API
     const response = await axios.get(
       `https://api.telegram.org/bot${TOKEN}/getChatMember`,
       { params: { chat_id: chatId, user_id: userId } }
@@ -79,14 +82,16 @@ app.post("/checkSubscription", async (req, res) => {
     const status = result.result.status;
     const isMember = ["member", "administrator", "creator"].includes(status);
 
-    return res.json({ success: isMember, message: isMember ? "User is subscribed" : "User is not subscribed" });
+    return res.json({
+      success: isMember,
+      message: isMember ? "User is subscribed ✅" : "User is not subscribed ❌",
+    });
 
   } catch (error) {
     console.error("🚨 Subscription check error:", error.response?.data || error.message);
     return res.status(500).json({ success: false, message: "Error checking subscription" });
   }
 });
-
 
 app.get("/", (req, res) => res.send("Bot is running ✅"));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

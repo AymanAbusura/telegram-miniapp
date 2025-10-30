@@ -52,7 +52,7 @@ import texts from "../data/texts.json";
 
 export default function UpdateCard({ onClose }) {
     const content = texts.updateCard;
-    
+
     const [checking, setChecking] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -77,19 +77,24 @@ export default function UpdateCard({ onClose }) {
                 }),
             });
 
-            const data = await response.json();
+            const text = await response.text(); // get raw response
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = { success: false, message: `Invalid server response: ${text}` };
+            }
+
+            setMessage(data.message || (data.success ? "✅ Subscribed!" : "❌ Not subscribed"));
 
             if (data.success) {
-                setMessage("✅ Subscribed! Energy boosted!");
                 window.dispatchEvent(new CustomEvent("energyBoost", { detail: 60 }));
-            } else {
-                setMessage("❌ You are not subscribed yet.");
             }
         } catch (err) {
-            setMessage("Server error. Try again later.");
+            setMessage(`Server error: ${err.message}`);
+        } finally {
+            setChecking(false);
         }
-
-        setChecking(false);
     };
 
     return (
