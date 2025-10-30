@@ -58,15 +58,13 @@ app.post("/checkSubscription", async (req, res) => {
   }
 
   try {
-    // Determine chatId
     let chatId;
     if (channelUsername.startsWith("-100")) {
-      chatId = Number(channelUsername); // Telegram API expects number for private channels
+      chatId = Number(channelUsername);
     } else {
       chatId = `@${channelUsername.replace("@", "")}`;
     }
 
-    // Correct GET request to Telegram API
     const response = await axios.get(
       `https://api.telegram.org/bot${TOKEN}/getChatMember`,
       { params: { chat_id: chatId, user_id: userId } }
