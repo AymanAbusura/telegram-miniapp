@@ -25,6 +25,11 @@ bot.start((ctx) =>
 
 bot.launch();
 
+bot.on("message", (ctx) => {
+  console.log("Channel ID:", ctx.chat.id);
+});
+
+
 app.post("/checkSubscription", async (req, res) => {
   const { userId, channelUsername } = req.body;
 
