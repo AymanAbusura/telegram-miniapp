@@ -45,6 +45,7 @@
 // }
 
 
+import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import channelProfile from "../assets/channel_profile.webp";
 import { openTelegram } from '../utils/openTelegram';
