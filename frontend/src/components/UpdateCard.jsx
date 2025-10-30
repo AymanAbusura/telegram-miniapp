@@ -23,8 +23,17 @@ export default function UpdateCard({ setSubscribed }) {
             const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
             const data = await res.json();
 
-            setSubscribed(data.subscribed);
-            alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
+            // PRIVATE CHANNEL
+            if (data.error) {
+                alert(data.error);
+            } else {
+                setSubscribed(data.subscribed);
+                alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
+            }
+
+            // PUBLIC CHANNEL
+            // setSubscribed(data.subscribed);
+            // alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
         } catch (err) {
             console.error(err);
             alert(content.error_message);
@@ -56,11 +65,18 @@ export default function UpdateCard({ setSubscribed }) {
 
     return (
         <>
-            <img
+            {/* <img
                 src={channelInfo.photo}
                 alt="Channel Profile"
                 className="channel-profile-image"
+            /> */}
+
+            <img
+                src={channelInfo.photo || "/default-channel.png"}
+                alt="Channel Profile"
+                className="channel-profile-image"
             />
+
 
             <div className="card-header">
                 <h2>{channelInfo.title}</h2>

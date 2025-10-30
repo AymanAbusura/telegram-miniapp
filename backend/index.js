@@ -30,41 +30,119 @@ bot.start((ctx) => {
 
 bot.launch().then(() => console.log("Telegram bot launched ✅"));
 
+// PUBLIC CHANNEL
+// app.get("/check-subscription/:userId", async (req, res) => {
+//   const userId = req.params.userId;
+//   try {
+//     const member = await bot.telegram.getChatMember(CHANNEL_ID, userId);
+//     const isSubscribed = ["creator", "administrator", "member"].includes(member.status);
+//     res.json({ subscribed: isSubscribed });
+//   } catch (err) {
+//     console.error("Error checking subscription:", err.description || err.message);
+//     res.json({ subscribed: false, error: "Bot cannot access member list. Make sure bot is admin." });
+//   }
+// });
+
+// PRIVATE CHANNEL
 app.get("/check-subscription/:userId", async (req, res) => {
   const userId = req.params.userId;
+
+  if (!userId) {
+    return res.status(400).json({ subscribed: false, error: "Missing userId" });
+  }
+
   try {
+    // Ensure bot is part of the channel
     const member = await bot.telegram.getChatMember(CHANNEL_ID, userId);
+
+    // Possible statuses: "creator", "administrator", "member", "restricted", "left", "kicked"
     const isSubscribed = ["creator", "administrator", "member"].includes(member.status);
+
     res.json({ subscribed: isSubscribed });
   } catch (err) {
     console.error("Error checking subscription:", err.description || err.message);
-    res.json({ subscribed: false, error: "Bot cannot access member list. Make sure bot is admin." });
+
+    // Telegram-specific errors
+    if (err.response && err.response.error_code === 400) {
+      res.json({
+        subscribed: false,
+        error: "Bot cannot access this private channel. Make sure the bot is a member/admin.",
+      });
+    } else if (err.response && err.response.error_code === 403) {
+      res.json({
+        subscribed: false,
+        error: "User not found in channel. Make sure the user joined the channel first.",
+      });
+    } else {
+      res.json({ subscribed: false, error: "Unknown error while checking subscription." });
+    }
   }
 });
 
+// PUCLIC CHANNEL
+// app.get("/channel-info", async (req, res) => {
+//     try {
+//         const chat = await bot.telegram.getChat(CHANNEL_ID);
+//         const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
+//         let photoUrl = null;
+
+//         if (fileId) {
+//             const file = await bot.telegram.getFileLink(fileId);
+//             photoUrl = file.href;
+//         }
+
+//         const channelInfo = {
+//             title: chat.title,
+//             description: chat.description || content.emptyDescription,
+//             photo: photoUrl,
+//         };
+
+//         res.json(channelInfo);
+//     } catch (err) {
+//         console.error("Error fetching channel info:", err);
+//         res.status(500).json({ error: "Failed to fetch channel info" });
+//     }
+// });
+
+// PRIVATE CHANNEL
 app.get("/channel-info", async (req, res) => {
-    try {
-        const chat = await bot.telegram.getChat(CHANNEL_ID);
-        const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
-        let photoUrl = null;
+  try {
+    // Get chat info
+    const chat = await bot.telegram.getChat(CHANNEL_ID);
 
-        if (fileId) {
-            const file = await bot.telegram.getFileLink(fileId);
-            photoUrl = file.href;
-        }
-
-        const channelInfo = {
-            title: chat.title,
-            description: chat.description || content.emptyDescription,
-            photo: photoUrl,
-        };
-
-        res.json(channelInfo);
-    } catch (err) {
-        console.error("Error fetching channel info:", err);
-        res.status(500).json({ error: "Failed to fetch channel info" });
+    let photoUrl = null;
+    if (chat.photo) {
+      try {
+        // Prefer big photo if available
+        const fileId = chat.photo.big_file_id || chat.photo.small_file_id;
+        const file = await bot.telegram.getFileLink(fileId);
+        photoUrl = file.href;
+      } catch (photoErr) {
+        console.warn("Could not fetch channel photo:", photoErr.message);
+      }
     }
+
+    const channelInfo = {
+      title: chat.title || "Untitled Channel",
+      description: chat.description || content.emptyDescription,
+      photo: photoUrl,
+    };
+
+    res.json(channelInfo);
+  } catch (err) {
+    console.error("Error fetching channel info:", err.description || err.message);
+
+    if (err.response && err.response.error_code === 400) {
+      res.status(400).json({
+        error:
+          "Bot cannot access this private channel. Make sure the bot is a member/admin.",
+      });
+    } else {
+      res.status(500).json({ error: "Failed to fetch channel info" });
+    }
+  }
 });
+
 
 app.get("/", (req, res) => res.send("Bot is running ✅"));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
