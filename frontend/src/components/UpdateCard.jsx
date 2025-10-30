@@ -138,106 +138,118 @@
 //     );
 // }
 
+
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import channelProfile from "../assets/channel_profile.webp";
 import { openTelegram } from "../utils/openTelegram";
 import texts from "../data/texts.json";
 
-export default function UpdateCard({ onClose }) {
-  const content = texts.updateCard;
+// Added currentMaxEnergy prop to better control the energy boost logic
+export default function UpdateCard({ onClose, currentMaxEnergy }) {
+    const content = texts.updateCard;
 
-  const [checking, setChecking] = useState(false);
-  const [message, setMessage] = useState("");
+    const [checking, setChecking] = useState(false);
+    const [message, setMessage] = useState("");
+    const BOOST_AMOUNT = 60; // Define the target max energy
 
-  const handleCheckSubscription = async () => {
-    setChecking(true);
-    setMessage("");
+    const handleCheckSubscription = async () => {
+        setChecking(true);
+        setMessage("");
 
-    try {
-      const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+        try {
+            const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+            if (!user) {
+                setMessage("Cannot detect Telegram user. Are you running this in the Telegram app?");
+                setChecking(false);
+                return;
+            }
 
-      if (!user) {
-        setMessage("Cannot detect Telegram user.");
-        setChecking(false);
-        return;
-      }
+            // Check if the boost has already been applied
+            if (currentMaxEnergy >= BOOST_AMOUNT) {
+                 setMessage("Maximum energy already increased! Enjoy.");
+                 setChecking(false);
+                 return;
+            }
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/checkSubscription`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.id,
-          channelUsername: process.env.REACT_APP_TELEGRAM_CHANNEL, // numeric ID for private channel
-        }),
-      });
+            // Use the API URL from the frontend .env
+            const apiUrl = process.env.REACT_APP_API_URL;
+            if (!apiUrl) {
+                setMessage("Configuration error: REACT_APP_API_URL is missing.");
+                setChecking(false);
+                return;
+            }
 
-      const text = await response.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = { success: false, message: `Invalid server response: ${text}` };
-      }
+            const response = await fetch(`${apiUrl}/checkSubscription`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: user.id,
+                    channelUsername: process.env.REACT_APP_TELEGRAM_CHANNEL,
+                }),
+            });
 
-      if (data.success) {
-        setMessage("✅ Subscribed! Energy boosted!");
-        // Trigger energy boost event for Home.jsx
-        window.dispatchEvent(new CustomEvent("energyBoost", { detail: 60 }));
-      } else {
-        setMessage("❌ You are not subscribed yet. Please join the channel.");
-      }
-    } catch (err) {
-      setMessage(`Server error: ${err.message}`);
-    } finally {
-      setChecking(false);
-    }
-  };
+            const text = await response.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = { success: false, message: `Invalid server response. Text: ${text.substring(0, 100)}...` };
+            }
 
-  return (
-    <div className="update-card">
-      {/* Channel Profile */}
-      <img
-        src={channelProfile}
-        alt="Channel Profile"
-        className="channel-profile-image"
-      />
+            // Set the message based on the response
+            setMessage(data.message || (data.success ? `✅ Subscribed! Max energy is now ${BOOST_AMOUNT}.` : "❌ Not subscribed. Please subscribe first."));
 
-      {/* Header */}
-      <div className="card-header">
-        <h2>{content.title}</h2>
-        <p>{content.description}</p>
-      </div>
+            // 🔑 Key logic: Dispatch event on success AND if boost is needed
+            if (data.success && currentMaxEnergy < BOOST_AMOUNT) {
+                // Dispatch event to Home.jsx to update energy to 60/60
+                window.dispatchEvent(new CustomEvent("energyBoost", { detail: BOOST_AMOUNT })); 
+            }
+        } catch (err) {
+            setMessage(`Server error: ${err.message}. Check your console and backend logs.`);
+        } finally {
+            setChecking(false);
+        }
+    };
 
-      {/* Energy info */}
-      <div className="energy-update-card">
-        <div className="energy-info-update">{content.energy_min}</div>
-        <ChevronRight size={20} />
-        <div className="energy-info-update">{content.energy_max}</div>
-      </div>
+    return (
+        <>
+            <img
+                src={channelProfile}
+                alt="Channel Profile"
+                className="channel-profile-image"
+            />
 
-      {/* Buttons */}
-      <div className="update-buttons">
-        {/* Subscribe button */}
-        <button
-          className="amount-submit-button subscribe-update-button"
-          onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
-        >
-          {content.subscribe}
-        </button>
+            <div className="card-header">
+                <h2>{content.title}</h2>
+                <p>{content.description}</p>
+            </div>
 
-        {/* Check subscription button */}
-        <button
-          onClick={handleCheckSubscription}
-          className="amount-submit-button check-update-button"
-          disabled={checking}
-        >
-          {checking ? "Checking..." : content.check}
-        </button>
-      </div>
+            <div className="energy-update-card">
+                <div className="energy-info-update">{content.energy_min}</div>
+                <ChevronRight size={20} />
+                <div className="energy-info-update">**{BOOST_AMOUNT}**</div> {/* Explicitly show the boosted amount */}
+            </div>
 
-      {/* Message */}
-      {message && <p className="update-message">{message}</p>}
-    </div>
-  );
+            <div className="update-buttons">
+                <button 
+                    className="amount-submit-button subscribe-update-button"
+                    onClick={() => openTelegram(process.env.REACT_APP_TELEGRAM_LINK)}
+                >
+                    {content.subscribe}
+                </button>
+
+                <button
+                    onClick={handleCheckSubscription}
+                    className="amount-submit-button check-update-button"
+                    disabled={checking}
+                >
+                    {checking ? "Checking..." : `${content.check}`}
+                </button>
+            </div>
+
+            {message && <p className="update-message">{message}</p>}
+            <button className="close-button" onClick={onClose}>Close</button> 
+        </>
+    );
 }

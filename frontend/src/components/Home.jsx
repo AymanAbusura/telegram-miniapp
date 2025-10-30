@@ -393,6 +393,226 @@
 //     );
 // }
 
+// import { useState, useEffect } from "react";
+// import { motion, AnimatePresence } from "framer-motion";
+// import coinImg from "../assets/coin.webp";
+// import { ChevronRight, ArrowUp } from "lucide-react";
+// import MenuBar from "./MenuBar";
+// import useBalance from "../hooks/useBalance";
+
+// import AnimatedModal from "../components/AnimatedModal";
+// import WithdrawForm from "../components/WithdrawForm";
+// import UpdateCard from "../components/UpdateCard";
+
+// import texts from "../data/texts.json";
+
+// export default function Home() {
+//   const content = texts.home;
+
+//   const [currentTab, setCurrentTab] = useState("Home");
+
+//   const [balance, setBalance] = useBalance();
+//   const [energy, setEnergy] = useState(30);
+//   const [maxEnergy, setMaxEnergy] = useState(30);
+//   const [floatingTexts, setFloatingTexts] = useState([]);
+
+//   const [showWithdrawForm, setShowWithdrawForm] = useState(false);
+//   const [withdrawAmount, setWithdrawAmount] = useState("");
+//   const [errorMessage, setErrorMessage] = useState("");
+
+//   const [showUpdatesCard, setShowUpdatesCard] = useState(false);
+
+//   // Load balance from localStorage
+//   useEffect(() => {
+//     localStorage.setItem("balance", balance.toFixed(2));
+//   }, [balance]);
+
+//   // Load maxEnergy from localStorage
+//   useEffect(() => {
+//     const savedMax = localStorage.getItem("maxEnergy");
+//     if (savedMax) {
+//       setMaxEnergy(Number(savedMax));
+//       setEnergy(Number(savedMax));
+//     }
+//   }, []);
+
+//   // Regenerate energy over time
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setEnergy((prev) => (prev < maxEnergy ? prev + 1 : prev));
+//     }, 30000); // every 30 seconds
+//     return () => clearInterval(interval);
+//   }, [maxEnergy]);
+
+//   // Listen for energy boost from UpdateCard
+//   useEffect(() => {
+//     const handleEnergyBoost = (e) => {
+//       console.log("Energy boost received:", e.detail);
+//       const newEnergy = e.detail;
+//       setMaxEnergy(newEnergy);
+//       setEnergy(newEnergy);
+//       localStorage.setItem("maxEnergy", newEnergy);
+//     };
+
+//     window.addEventListener("energyBoost", handleEnergyBoost);
+//     return () => window.removeEventListener("energyBoost", handleEnergyBoost);
+//   }, []);
+
+//   // Prevent body scroll while in app
+//   useEffect(() => {
+//     document.body.classList.add("no-scroll");
+//     return () => document.body.classList.remove("no-scroll");
+//   }, []);
+
+//   // Handle clicking on coin
+//   const handleCoinClick = () => {
+//     if (energy > 0) {
+//       setBalance((prev) => prev + 0.05);
+//       setEnergy((prev) => prev - 1);
+
+//       const id = Math.random().toString(36).substr(2, 9);
+//       setFloatingTexts((prev) => [...prev, { id, text: "+0.05" }]);
+
+//       setTimeout(() => {
+//         setFloatingTexts((prev) => prev.filter((t) => t.id !== id));
+//       }, 1000);
+//     }
+//   };
+
+//   // Handle Withdraw Form submission
+//   const handleWithdrawSubmit = () => {
+//     const amount = parseFloat(withdrawAmount);
+
+//     if (isNaN(amount)) {
+//       setErrorMessage(content.withdraw.invalidNumberError);
+//       return;
+//     }
+
+//     if (amount < 200000) {
+//       setErrorMessage(content.withdraw.minAmountError);
+//       return;
+//     }
+
+//     if (amount > balance) {
+//       setErrorMessage(content.withdraw.notEnoughMoneyError);
+//       return;
+//     }
+
+//     setBalance((prev) => prev - amount);
+//     setShowWithdrawForm(false);
+//     setErrorMessage("");
+//     alert(`Withdrawal successful: $${amount}`);
+//   };
+
+//   return (
+//     <div className="home-container">
+//       {/* Header with Withdraw button */}
+//       <div className="home-header">
+//         <div className="withdraw-box">
+//           <button
+//             className="withdraw-button"
+//             onClick={() => setShowWithdrawForm(true)}
+//           >
+//             <span className="withdraw-icon">
+//               <ArrowUp size={18} style={{ color: "white" }} />
+//             </span>
+//             {content.withdraw.button}
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Withdraw Modal */}
+//       <AnimatedModal
+//         isOpen={showWithdrawForm}
+//         onClose={() => setShowWithdrawForm(false)}
+//         from="top"
+//         wrapperClass="withdraw-form-container"
+//       >
+//         <WithdrawForm
+//           withdrawAmount={withdrawAmount}
+//           setWithdrawAmount={setWithdrawAmount}
+//           handleWithdrawSubmit={handleWithdrawSubmit}
+//           errorMessage={errorMessage}
+//         />
+//       </AnimatedModal>
+
+//       {/* Update Card Modal */}
+//       <AnimatedModal
+//         isOpen={showUpdatesCard}
+//         onClose={() => setShowUpdatesCard(false)}
+//         from="bottom"
+//         wrapperClass="updates-card-container"
+//       >
+//         <UpdateCard onClose={() => setShowUpdatesCard(false)} />
+//       </AnimatedModal>
+
+//       {/* Balance Display */}
+//       <div className="balance-section" style={{ position: "relative" }}>
+//         <h1 className="balance">
+//           {balance.toFixed(2)} <span className="home-currency">$</span>
+//         </h1>
+
+//         {/* Floating Text Animation */}
+//         <AnimatePresence>
+//           {floatingTexts.map((ft) => (
+//             <motion.div
+//               key={ft.id}
+//               initial={{ opacity: 1, y: 0 }}
+//               animate={{ opacity: 0, y: -50 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 1 }}
+//               style={{
+//                 position: "absolute",
+//                 bottom: "150px",
+//                 left: "50%",
+//                 transform: "translateX(-50%)",
+//                 color: "white",
+//                 fontSize: "42px",
+//                 fontWeight: "900",
+//                 pointerEvents: "none",
+//                 zIndex: 10,
+//               }}
+//             >
+//               {ft.text}
+//             </motion.div>
+//           ))}
+//         </AnimatePresence>
+
+//         {/* Coin */}
+//         <motion.img
+//           src={coinImg}
+//           alt="Coin"
+//           className="home-coin"
+//           onClick={handleCoinClick}
+//           whileTap={{ scale: 1.2 }}
+//         />
+//       </div>
+
+//       {/* Energy Section */}
+//       <div className="energy-section">
+//         <div className="energy-info">⚡ {energy}/{maxEnergy}</div>
+//         <button
+//           className="updates-btn"
+//           onClick={() => setShowUpdatesCard(true)}
+//         >
+//           🚀 Updates
+//           <ChevronRight size={18} />
+//         </button>
+//       </div>
+
+//       <div className="energy-bar">
+//         <div
+//           className="energy-fill"
+//           style={{ width: `${(energy / maxEnergy) * 100}%` }}
+//         ></div>
+//       </div>
+
+//       {/* Menu Bar */}
+//       <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+//     </div>
+//   );
+// }
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import coinImg from "../assets/coin.webp";
@@ -402,7 +622,7 @@ import useBalance from "../hooks/useBalance";
 
 import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
-import UpdateCard from "../components/UpdateCard";
+import UpdateCard from "../components/UpdateCard"; // Ensure this import path is correct
 
 import texts from "../data/texts.json";
 
@@ -427,12 +647,17 @@ export default function Home() {
     localStorage.setItem("balance", balance.toFixed(2));
   }, [balance]);
 
-  // Load maxEnergy from localStorage
+  // Load maxEnergy from localStorage and set initial energy
   useEffect(() => {
     const savedMax = localStorage.getItem("maxEnergy");
     if (savedMax) {
       setMaxEnergy(Number(savedMax));
       setEnergy(Number(savedMax));
+    }
+    // Set initial energy if it was a new session and no max was saved
+    else {
+        setEnergy(30); 
+        setMaxEnergy(30);
     }
   }, []);
 
@@ -447,16 +672,22 @@ export default function Home() {
   // Listen for energy boost from UpdateCard
   useEffect(() => {
     const handleEnergyBoost = (e) => {
-      console.log("Energy boost received:", e.detail);
       const newEnergy = e.detail;
-      setMaxEnergy(newEnergy);
-      setEnergy(newEnergy);
-      localStorage.setItem("maxEnergy", newEnergy);
+      // Only update if the new energy is greater than the current max
+      if (newEnergy > maxEnergy) { 
+          console.log(`Energy boost received: setting maxEnergy to ${newEnergy}`);
+          setMaxEnergy(newEnergy);
+          setEnergy(newEnergy); // Fill up the new max energy
+          localStorage.setItem("maxEnergy", newEnergy);
+      } else {
+          console.log("Energy boost ignored: Current max is already equal or higher.");
+      }
     };
 
+    // 🔑 Key listener for the subscription success event
     window.addEventListener("energyBoost", handleEnergyBoost);
     return () => window.removeEventListener("energyBoost", handleEnergyBoost);
-  }, []);
+  }, [maxEnergy]); // Depend on maxEnergy to allow comparison inside the handler
 
   // Prevent body scroll while in app
   useEffect(() => {
@@ -479,29 +710,20 @@ export default function Home() {
     }
   };
 
-  // Handle Withdraw Form submission
+  // Handle Withdraw Form submission (simplified for this context)
   const handleWithdrawSubmit = () => {
     const amount = parseFloat(withdrawAmount);
-
-    if (isNaN(amount)) {
-      setErrorMessage(content.withdraw.invalidNumberError);
-      return;
-    }
-
-    if (amount < 200000) {
-      setErrorMessage(content.withdraw.minAmountError);
-      return;
-    }
-
-    if (amount > balance) {
-      setErrorMessage(content.withdraw.notEnoughMoneyError);
-      return;
+    // ... (Your existing withdrawal logic)
+    
+    if (isNaN(amount) || amount < 200000 || amount > balance) {
+        setErrorMessage(content.withdraw.minAmountError); // Replace with your actual error logic
+        return;
     }
 
     setBalance((prev) => prev - amount);
     setShowWithdrawForm(false);
     setErrorMessage("");
-    alert(`Withdrawal successful: $${amount}`);
+    window.Telegram.WebApp.showAlert(`Withdrawal successful: $${amount}`);
   };
 
   return (
@@ -543,7 +765,7 @@ export default function Home() {
         from="bottom"
         wrapperClass="updates-card-container"
       >
-        <UpdateCard onClose={() => setShowUpdatesCard(false)} />
+        <UpdateCard onClose={() => setShowUpdatesCard(false)} currentMaxEnergy={maxEnergy} />
       </AnimatedModal>
 
       {/* Balance Display */}
