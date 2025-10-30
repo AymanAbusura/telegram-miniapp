@@ -97,7 +97,13 @@
     "subscribe": "Subscribe",
     "energy_min": "⚡ 30",
     "energy_max": "⚡ 60",
-    "check": "Check it"
+    "check": "Check it",
+    "Checking": "Checking...",
+    "alert_message": "Please open this in Telegram WebApp.",
+    "error_message": "Error checking subscription.",
+    "subscribed": "You are subscribed ✅",
+    "notSubscribed": "You are not subscribed ❌",
+    "channel_info_error": "Error fetching channel info:"
   },
 
   "upgradeLevel": {

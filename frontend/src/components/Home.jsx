@@ -92,11 +92,6 @@ export default function Home() {
         alert(content.withdraw.successMessage.replace("{{amount}}", amount));
     };
 
-    useEffect(() => {
-        document.body.classList.add("no-scroll");
-        return () => document.body.classList.remove("no-scroll");
-    }, []);
-
     return (
         <div className="home-container">
             <div className="home-header">
@@ -133,7 +128,7 @@ export default function Home() {
                 from="bottom"
                 wrapperClass="updates-card-container"
             >
-                <UpdateCard onClose={() => setShowUpdatesCard(false)} setSubscribed={setSubscribed} />
+                <UpdateCard setSubscribed={setSubscribed} />
             </AnimatedModal>
 
             <div className="balance-section" style={{ position: "relative" }}>

@@ -42,21 +42,27 @@ app.get("/check-subscription/:userId", async (req, res) => {
   }
 });
 
-app.get("/channel-photo", async (req, res) => {
-    try {
-        const chat = await bot.telegram.getChat(process.env.TELEGRAM_CHANNEL_ID);
+app.get("/channel-info", async (req, res) => {
+  try {
+    const chat = await bot.telegram.getChat(process.env.TELEGRAM_CHANNEL_ID);
 
-        const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
+    const fileId = chat.photo?.big_file_id || chat.photo?.small_file_id;
+    let photoUrl = null;
 
-        if (!fileId) return res.json({ url: null });
-
-        const file = await bot.telegram.getFileLink(fileId);
-
-        res.json({ url: file.href });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ url: null });
+    if (fileId) {
+      const file = await bot.telegram.getFileLink(fileId);
+      photoUrl = file.href;
     }
+
+    res.json({
+      title: chat.title,
+      description: chat.description || content.emptyDescription,
+      photo: photoUrl,
+    });
+  } catch (err) {
+    console.error("Error fetching channel info:", err);
+    res.status(500).json({ error: "Failed to fetch channel info" });
+  }
 });
 
 app.get("/", (req, res) => res.send("Bot is running ✅"));
