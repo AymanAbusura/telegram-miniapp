@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const { Telegraf } = require("telegraf");
 require("dotenv").config();
+const fs = require("fs");
 
 const app = express();
 app.use(express.json());
@@ -9,19 +10,19 @@ app.use(express.json());
 const PORT = process.env.PORT || 10000;
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBLINK = process.env.WEB_LINK;
+const RENDER_URL = process.env.RENDER_URL;
 
 const bot = new Telegraf(TOKEN);
-const fs = require("fs");
 
 const content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
 
-bot.start((ctx) =>
+bot.start((ctx) => {
   ctx.reply(content.welcomeMessage, {
     reply_markup: {
       inline_keyboard: [[{ text: content.goToMiniAppButton, web_app: { url: WEBLINK } }]],
     },
-  })
-);
+  });
+});
 
 bot.on("message", (ctx) => {
   console.log("📢 Chat info:", {
@@ -31,9 +32,12 @@ bot.on("message", (ctx) => {
   });
 });
 
+// Webhook setup //
+const BOT_PATH = `/bot${TOKEN}`;
+bot.telegram.setWebhook(`${RENDER_URL}${BOT_PATH}`);
+app.use(bot.webhookCallback(BOT_PATH));
 
-bot.launch();
-
+// Subscription check endpoint //
 app.post("/checkSubscription", async (req, res) => {
   const { userId, channelUsername } = req.body;
 
@@ -42,12 +46,10 @@ app.post("/checkSubscription", async (req, res) => {
   }
 
   try {
-    // Detect private (-100...) vs public channel (@name)
     const chatId = channelUsername.startsWith("-100")
       ? channelUsername
       : `@${channelUsername}`;
 
-    // Telegram API request
     const response = await axios.post(
       `https://api.telegram.org/bot${TOKEN}/getChatMember`,
       {
