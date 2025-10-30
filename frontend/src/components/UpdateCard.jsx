@@ -57,7 +57,7 @@ export default function UpdateCard({ setSubscribed }) {
     return (
         <>
             <img
-                src={channelImage}
+                src={channelInfo.photo}
                 alt="Channel Profile"
                 className="channel-profile-image"
             />
