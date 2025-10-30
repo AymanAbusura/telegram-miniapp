@@ -30,15 +30,6 @@ bot.start((ctx) => {
 
 bot.launch().then(() => console.log("Telegram bot launched ✅"));
 
-bot.on("message", (ctx) => {
-  if (ctx.message.forward_from_chat) {
-    console.log("Channel info:", ctx.message.forward_from_chat);
-  } else {
-    console.log("Regular message:", ctx.chat);
-  }
-});
-
-
 // PUBLIC CHANNEL
 // app.get("/check-subscription/:userId", async (req, res) => {
 //   const userId = req.params.userId;
