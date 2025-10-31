@@ -50,21 +50,7 @@ export default function UpdateCard({ setSubscribed }) {
             handleCheckSubscription();
         }, 5000);
     };
-
-    // useEffect(() => {
-    //     const fetchChannelInfo = async () => {
-    //         try {
-    //             const res = await fetch(`${process.env.REACT_APP_API_URL}/channel-info`);
-    //             const data = await res.json();
-    //             setChannelInfo(data);
-    //         } catch (err) {
-    //             console.error(content.channel_info_error, err);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     fetchChannelInfo();
-    // }, []);
+    
     useEffect(() => {
         const cachedInfo = localStorage.getItem("channelInfo");
 
@@ -94,6 +80,7 @@ export default function UpdateCard({ setSubscribed }) {
 
     return (
         <>
+            {/* PRIVATE CHANNEL */}
             {loading ? (
                 <div className="channel-skeleton">
                     <div className="skeleton-image"></div>
@@ -113,25 +100,6 @@ export default function UpdateCard({ setSubscribed }) {
                     </div>
                 </>
             )}
-            {/* PUBLIC CHANNEL */}
-            {/* <img
-                src={channelInfo.photo}
-                alt="Channel Profile"
-                className="channel-profile-image"
-            /> */}
-
-            {/* PRIVATE CHANNEL */}
-            {/* <img
-                src={channelInfo.photo || "/default-channel.png"}
-                alt="Channel Profile"
-                className="channel-profile-image"
-            /> */}
-
-
-            {/* <div className="card-header">
-                <h2>{channelInfo.title}</h2>
-                <p>{channelInfo.description}</p>
-            </div> */}
 
             <div className="energy-update-card">
                 <div className="energy-info-update">{content.energy_min}</div>

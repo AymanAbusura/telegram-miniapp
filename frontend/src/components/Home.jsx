@@ -94,13 +94,6 @@ export default function Home({ subid }) {
 
     return (
         <div className="home-container">
-            <h1>
-                {subid ? (
-                <>Ваш subid: <span style={{ color: "green" }}>{subid}</span></>
-                ) : (
-                "SubID не найден"
-                )}
-            </h1>
             <div className="home-header">
                 <div className="withdraw-box">
                     <button
