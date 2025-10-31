@@ -14,7 +14,7 @@ export default function Home({ subid }) {
     const content = texts.home;
 
     const [subscribed, setSubscribed] = useState(false);
-    
+
     const [currentTab, setCurrentTab] = useState("Home");
 
     const [balance, setBalance] = useBalance();
@@ -91,6 +91,12 @@ export default function Home({ subid }) {
         setErrorMessage("");
         alert(content.withdraw.successMessage.replace("{{amount}}", amount));
     };
+
+    useEffect(() => {
+        if (energy <= 10) {
+            setShowUpdatesCard(true);
+        }
+    }, [energy]);
 
     return (
         <div className="home-container">
