@@ -65,12 +65,14 @@ export default function UpdateCard({ setSubscribed }) {
 
     return (
         <>
+            {/* PUBLIC CHANNEL */}
             {/* <img
                 src={channelInfo.photo}
                 alt="Channel Profile"
                 className="channel-profile-image"
             /> */}
 
+            {/* PRIVATE CHANNEL */}
             <img
                 src={channelInfo.photo || "/default-channel.png"}
                 alt="Channel Profile"
