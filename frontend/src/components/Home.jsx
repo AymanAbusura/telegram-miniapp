@@ -96,17 +96,17 @@ export default function Home() {
     const [subid, setSubid] = useState(null);
 
     useEffect(() => {
-        // Пробуем получить параметр из localStorage (сохранённый в App.jsx)
         const urlParams = new URLSearchParams(window.location.search);
-        const subid = urlParams.get("ref"); // 'ref' соответствует ?ref=SUBID
+        const storedSubid = urlParams.get("ref"); // читаем параметр ref из URL
 
         if (storedSubid) {
-        setSubid(storedSubid);
-        console.log("SubID найден:", storedSubid);
+            setSubid(storedSubid);
+            console.log("SubID найден:", storedSubid);
         } else {
-        console.log("SubID не найден");
+            console.log("SubID не найден");
         }
     }, []);
+
 
     return (
         <div className="home-container">
