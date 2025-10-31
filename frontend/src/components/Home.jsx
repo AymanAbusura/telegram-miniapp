@@ -10,7 +10,7 @@ import UpdateCard from "../components/UpdateCard";
 
 import texts from "../data/texts.json";
 
-export default function Home() {
+export default function Home({ subid }) {
     const content = texts.home;
 
     const [subscribed, setSubscribed] = useState(false);
@@ -91,22 +91,6 @@ export default function Home() {
         setErrorMessage("");
         alert(content.withdraw.successMessage.replace("{{amount}}", amount));
     };
-
-    // TEST
-    const [subid, setSubid] = useState(null);
-
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const storedSubid = urlParams.get("ref"); // читаем параметр ref из URL
-
-        if (storedSubid) {
-            setSubid(storedSubid);
-            console.log("SubID найден:", storedSubid);
-        } else {
-            console.log("SubID не найден");
-        }
-    }, []);
-
 
     return (
         <div className="home-container">
