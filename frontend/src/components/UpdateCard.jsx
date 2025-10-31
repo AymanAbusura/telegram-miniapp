@@ -6,6 +6,7 @@ import texts from "../data/texts.json";
 export default function UpdateCard({ setSubscribed }) {
     const content = texts.updateCard;
 
+    const [loading, setLoading] = useState(true);
     const [checking, setChecking] = useState(false);
     const [channelInfo, setChannelInfo] = useState({
         title: "",
@@ -58,6 +59,8 @@ export default function UpdateCard({ setSubscribed }) {
                 setChannelInfo(data);
             } catch (err) {
                 console.error(content.channel_info_error, err);
+            } finally {
+                setLoading(false);
             }
         };
         fetchChannelInfo();
@@ -65,6 +68,25 @@ export default function UpdateCard({ setSubscribed }) {
 
     return (
         <>
+            {loading ? (
+                <div className="channel-skeleton">
+                    <div className="skeleton-image"></div>
+                    <div className="skeleton-text title"></div>
+                    <div className="skeleton-text description"></div>
+                </div>
+            ) : (
+                <>
+                    <img
+                        src={channelInfo.photo || "/default-channel.png"}
+                        alt="Channel Profile"
+                        className="channel-profile-image"
+                    />
+                    <div className="card-header">
+                        <h2>{channelInfo.title}</h2>
+                        <p>{channelInfo.description}</p>
+                    </div>
+                </>
+            )}
             {/* PUBLIC CHANNEL */}
             {/* <img
                 src={channelInfo.photo}
@@ -73,17 +95,17 @@ export default function UpdateCard({ setSubscribed }) {
             /> */}
 
             {/* PRIVATE CHANNEL */}
-            <img
+            {/* <img
                 src={channelInfo.photo || "/default-channel.png"}
                 alt="Channel Profile"
                 className="channel-profile-image"
-            />
+            /> */}
 
 
-            <div className="card-header">
+            {/* <div className="card-header">
                 <h2>{channelInfo.title}</h2>
                 <p>{channelInfo.description}</p>
-            </div>
+            </div> */}
 
             <div className="energy-update-card">
                 <div className="energy-info-update">{content.energy_min}</div>
