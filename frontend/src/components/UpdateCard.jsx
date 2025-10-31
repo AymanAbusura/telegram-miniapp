@@ -80,7 +80,6 @@ export default function UpdateCard({ setSubscribed }) {
 
     return (
         <>
-            {/* PRIVATE CHANNEL */}
             {loading ? (
                 <div className="channel-skeleton">
                     <div className="skeleton-image"></div>
