@@ -92,8 +92,29 @@ export default function Home() {
         alert(content.withdraw.successMessage.replace("{{amount}}", amount));
     };
 
+    // TEST
+    const [subid, setSubid] = useState(null);
+
+    useEffect(() => {
+        // Пробуем получить параметр из localStorage (сохранённый в App.jsx)
+        const storedSubid = localStorage.getItem("startParam");
+        if (storedSubid) {
+        setSubid(storedSubid);
+        console.log("SubID найден:", storedSubid);
+        } else {
+        console.log("SubID не найден");
+        }
+    }, []);
+
     return (
         <div className="home-container">
+            <h1>
+                {subid ? (
+                <>Ваш subid: <span style={{ color: "green" }}>{subid}</span></>
+                ) : (
+                "SubID не найден"
+                )}
+            </h1>
             <div className="home-header">
                 <div className="withdraw-box">
                     <button
