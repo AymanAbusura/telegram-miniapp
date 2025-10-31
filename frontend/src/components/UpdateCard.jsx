@@ -51,19 +51,45 @@ export default function UpdateCard({ setSubscribed }) {
         }, 5000);
     };
 
+    // useEffect(() => {
+    //     const fetchChannelInfo = async () => {
+    //         try {
+    //             const res = await fetch(`${process.env.REACT_APP_API_URL}/channel-info`);
+    //             const data = await res.json();
+    //             setChannelInfo(data);
+    //         } catch (err) {
+    //             console.error(content.channel_info_error, err);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     fetchChannelInfo();
+    // }, []);
     useEffect(() => {
+        const cachedInfo = localStorage.getItem("channelInfo");
+
+        if (cachedInfo) {
+            setChannelInfo(JSON.parse(cachedInfo));
+            setLoading(false);
+        }
+
         const fetchChannelInfo = async () => {
             try {
                 const res = await fetch(`${process.env.REACT_APP_API_URL}/channel-info`);
                 const data = await res.json();
+
                 setChannelInfo(data);
+                localStorage.setItem("channelInfo", JSON.stringify(data));
             } catch (err) {
                 console.error(content.channel_info_error, err);
             } finally {
                 setLoading(false);
             }
         };
+
+        if (!cachedInfo) {
         fetchChannelInfo();
+        }
     }, []);
 
     return (
