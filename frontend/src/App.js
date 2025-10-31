@@ -9,12 +9,14 @@ import './App.css';
 
 function App() {
   useEffect(() => {
-    const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
+    const urlParams = new URLSearchParams(window.location.search);
+    const startParam = urlParams.get("ref");
+    
     if (startParam) {
-      console.log("Получен параметр из deep link:", startParam);
+      console.log("Получен subid из URL:", startParam);
       localStorage.setItem("startParam", startParam);
     } else {
-      console.log("Нет параметра start_param");
+      console.log("SubID не найден в URL");
     }
   }, []);
 
