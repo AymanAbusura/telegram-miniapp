@@ -1,4 +1,10 @@
 {
+  "desktop": {
+    "title": "Please try our Mini App from your phone",
+    "description": "This Telegram Mini App is designed for mobile screens only. Scan the QR code below or open it directly in your Telegram app.",
+    "qrLabel": "Scan to open in Telegram"
+  },
+  
   "welcomeCard": {
     "headerStart": "Welcome to the",
     "highlight": "Easy Money",

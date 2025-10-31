@@ -48,6 +48,7 @@
 
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Desktop from "./components/Desktop";
 import WelcomeCard from "./components/WelcomeCard";
 import Home from "./components/Home";
 import Benefit from "./components/Benefit";
@@ -60,15 +61,13 @@ function App() {
   const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {
-    // Check screen width
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 425);
     };
 
-    handleResize(); // initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -93,19 +92,12 @@ function App() {
     }
   }, []);
 
-  // If not mobile, show message
   if (!isMobile) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 text-center px-4">
-        <h1 className="text-2xl font-semibold mb-3">📱 Please try our Mini App from your phone</h1>
-        <p className="text-gray-600 max-w-md">
-          This Telegram Mini App is designed for mobile devices only.
-        </p>
-      </div>
+      <Desktop />
     );
   }
 
-  // Mobile view: show routes
   return (
     <BrowserRouter>
       <Routes>
