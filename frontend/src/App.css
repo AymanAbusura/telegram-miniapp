@@ -7,25 +7,6 @@ body.no-scroll {
   overflow: hidden;
 }
 
-.join-channel-modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0,0,0,0.7);
-    padding: 20px;
-    border-radius: 12px;
-    color: white;
-}
-
-.join-channel-content button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #ffd700;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
 /* DESKTOP VIEW */
 .desktop-container {
   height: 100vh;
