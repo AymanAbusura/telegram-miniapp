@@ -489,78 +489,6 @@ body.no-scroll {
   border-top-right-radius: 12px;
 }
 
-.update-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.subscribe-update-button {
-  width: 150px;
-}
-
-.check-update-button {
-  color: #1E90FF;
-  background-color: #031b32a6;
-  width: 150px;
-}
-
-.energy-update-card {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.energy-info-update {
-  background-color: #6666666e;
-  padding: 5px 15px;
-  border-radius: 5px;
-}
-
-.channel-profile-image {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
-}
-
-.card-header {
-  text-align: center;
-}
-
-.channel-skeleton {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.skeleton-image {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px;
-  background: #e0e0e0;
-  animation: pulse 1.5s infinite;
-  margin-bottom: 12px;
-}
-
-.skeleton-text {
-  height: 14px;
-  width: 80%;
-  background: #e0e0e0;
-  border-radius: 4px;
-  animation: pulse 1.5s infinite;
-  margin-bottom: 6px;
-}
-
-.skeleton-text.title {
-  width: 60%;
-  height: 16px;
-}
-
-@keyframes pulse {
-  0% { opacity: 1; }
-  50% { opacity: 0.4; }
-  100% { opacity: 1; }
-}
-
 /* BENIFITS */
 .benefit-container {
   background: linear-gradient(to bottom, #000000, #0b2a5a);
@@ -1029,6 +957,79 @@ body.no-scroll {
     font-size: 15px;
     font-weight: 400;
     color: #8e8e93;
+}
+
+/* UPDATE CARD */
+.channel-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.skeleton-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  background: #e0e0e0;
+  animation: pulse 1.5s infinite;
+  margin-bottom: 12px;
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 80%;
+  background: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+  margin-bottom: 6px;
+}
+
+.skeleton-text.title {
+  width: 60%;
+  height: 16px;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.channel-profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+}
+
+.card-header {
+  text-align: center;
+}
+
+.energy-update-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.energy-info-update {
+  background-color: #6666666e;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+
+.update-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.subscribe-update-button {
+  width: 150px;
+}
+
+.check-update-button {
+  color: #1E90FF;
+  background-color: #031b32a6;
+  width: 150px;
 }
 
 /* UPGRADE LEVEL */
