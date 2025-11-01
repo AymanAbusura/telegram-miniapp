@@ -60,7 +60,7 @@ export default function Home({ subid }) {
       setEnergy((prev) => Math.max(prev, 60));
     } else {
       setMaxEnergy(30);
-      setEnergy((prev) => Math.min(prev, 30));
+      setEnergy(30);
     }
   }, [subscribed]);
 
@@ -127,7 +127,6 @@ export default function Home({ subid }) {
         </div>
       </div>
 
-      {/* Withdraw Form */}
       <AnimatedModal
         isOpen={showWithdrawForm}
         onClose={() => setShowWithdrawForm(false)}
@@ -142,7 +141,6 @@ export default function Home({ subid }) {
         />
       </AnimatedModal>
 
-      {/* Update Card */}
       <AnimatedModal
         isOpen={showUpdatesCard}
         onClose={() => setShowUpdatesCard(false)}

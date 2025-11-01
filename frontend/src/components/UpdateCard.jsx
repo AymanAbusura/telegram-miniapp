@@ -24,19 +24,13 @@ export default function UpdateCard({ setSubscribed }) {
             const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
             const data = await res.json();
 
-            // PRIVATE CHANNEL
             if (data.error) {
                 alert(data.error);
             } else {
                 setSubscribed(data.subscribed);
                 localStorage.setItem("subscribed", data.subscribed ? "true" : "false");
-                alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
+                alert(data.subscribed ? content.subscribed : content.notSubscribed);
             }
-
-            // PUBLIC CHANNEL
-            // setSubscribed(data.subscribed);
-            // localStorage.setItem("subscribed", data.subscribed ? "true" : "false");
-            // alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
         } catch (err) {
             console.error(err);
             alert(content.error_message);
@@ -75,9 +69,7 @@ export default function UpdateCard({ setSubscribed }) {
             }
         };
 
-        if (!cachedInfo) {
-        fetchChannelInfo();
-        }
+        if (!cachedInfo) fetchChannelInfo();
     }, []);
 
     return (
@@ -131,7 +123,7 @@ export default function UpdateCard({ setSubscribed }) {
                     onClick={handleCheckSubscription}
                     disabled={checking}
                 >
-                    {checking ? `${content.Checking}` : `${content.check}`}
+                    {checking ? content.Checking : content.check}
                 </button>
             </div>
         </>

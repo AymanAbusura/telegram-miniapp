@@ -538,6 +538,7 @@ body.no-scroll {
   border-radius: 10px;
   background: #e0e0e0;
   animation: pulse 1.5s infinite;
+  margin-bottom: 12px;
 }
 
 .skeleton-text {
