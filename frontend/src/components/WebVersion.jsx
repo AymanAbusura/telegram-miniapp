@@ -1,6 +1,6 @@
 import texts from "../data/texts.json";
 
-const Desktop = () => {
+const WebVersion = () => {
     const content = texts.desktop;
 
     return (
@@ -23,4 +23,4 @@ const Desktop = () => {
     );
 };
 
-export default Desktop;
+export default WebVersion;
