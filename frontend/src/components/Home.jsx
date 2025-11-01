@@ -10,7 +10,7 @@ import UpdateCard from "../components/UpdateCard";
 
 import texts from "../data/texts.json";
 
-export default function Home({ subid }) {
+export default function Home() {
   const content = texts.home;
 
   const [subscribed, setSubscribed] = useState(() => {
@@ -57,12 +57,33 @@ export default function Home({ subid }) {
 
     if (subscribed) {
       setMaxEnergy(60);
-      setEnergy((prev) => Math.max(prev, 60));
+      setEnergy((prev) => (prev < 60 ? 60 : prev));
     } else {
       setMaxEnergy(30);
       setEnergy(30);
     }
   }, [subscribed]);
+
+  useEffect(() => {
+    const checkSubscriptionOnLoad = async () => {
+      const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+      if (!userId) return;
+
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
+        const data = await res.json();
+
+        if (!data.error) {
+          setSubscribed(data.subscribed);
+          localStorage.setItem("subscribed", data.subscribed ? "true" : "false");
+        }
+      } catch (err) {
+        console.error("Failed to check subscription on load", err);
+      }
+    };
+
+    checkSubscriptionOnLoad();
+  }, []);
 
   const handleCoinClick = () => {
     if (energy > 0) {
