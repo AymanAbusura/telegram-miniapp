@@ -7,9 +7,9 @@ body.no-scroll {
   overflow: hidden;
 }
 
-/* DESKTOP VIEW */
+/* WEB VERSION */
 .desktop-container {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   background: linear-gradient(135deg, #0f172a, #1e293b);
   display: flex;
@@ -17,6 +17,7 @@ body.no-scroll {
   justify-content: center;
   overflow: hidden;
   font-family: "Inter", system-ui, sans-serif;
+  padding: 1rem;
 }
 
 .desktop-card {
@@ -26,13 +27,13 @@ body.no-scroll {
   color: #f3f4f6;
   text-align: center;
   max-width: 420px;
-  width: 90%;
+  width: 100%;
   position: relative;
   z-index: 2;
-  box-shadow: 
-    0 0 10px #00c6ff, 
-    0 0 20px #00c6ff, 
-    0 0 40px #00c6ff50, 
+  box-shadow:
+    0 0 10px #00c6ff,
+    0 0 20px #00c6ff,
+    0 0 40px #00c6ff50,
     0 0 60px #00c6ff30;
   animation: glowPulse 2.5s ease-in-out infinite alternate;
   transition: transform 0.3s ease;
@@ -44,24 +45,24 @@ body.no-scroll {
 
 @keyframes glowPulse {
   0% {
-    box-shadow: 
-      0 0 10px #00c6ff, 
-      0 0 20px #00c6ff, 
-      0 0 40px #00c6ff50, 
+    box-shadow:
+      0 0 10px #00c6ff,
+      0 0 20px #00c6ff,
+      0 0 40px #00c6ff50,
       0 0 60px #00c6ff30;
   }
   50% {
-    box-shadow: 
-      0 0 15px #00e0ff, 
-      0 0 25px #00e0ff, 
-      0 0 50px #00e0ff70, 
+    box-shadow:
+      0 0 15px #00e0ff,
+      0 0 25px #00e0ff,
+      0 0 50px #00e0ff70,
       0 0 70px #00e0ff40;
   }
   100% {
-    box-shadow: 
-      0 0 10px #00c6ff, 
-      0 0 20px #00c6ff, 
-      0 0 40px #00c6ff50, 
+    box-shadow:
+      0 0 10px #00c6ff,
+      0 0 20px #00c6ff,
+      0 0 40px #00c6ff50,
       0 0 60px #00c6ff30;
   }
 }
@@ -106,6 +107,66 @@ body.no-scroll {
   margin-top: 0.5rem;
   color: #94a3b8;
   font-size: 0.9rem;
+}
+
+/* 🌍 Responsive adjustments */
+@media (max-width: 768px) {
+  .desktop-card {
+    padding: 1.8rem;
+    border-radius: 18px;
+    box-shadow:
+      0 0 6px #00c6ff,
+      0 0 15px #00c6ff60;
+  }
+
+  .phone-emoji {
+    font-size: 2.5rem;
+  }
+
+  .desktop-title {
+    font-size: 1.4rem;
+  }
+
+  .desktop-text {
+    font-size: 0.95rem;
+  }
+
+  .qr-image {
+    width: 110px;
+    height: 110px;
+  }
+
+  .qr-label {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .desktop-card {
+    padding: 1.2rem;
+    border-radius: 16px;
+  }
+
+  .desktop-title {
+    font-size: 1.25rem;
+  }
+
+  .desktop-text {
+    font-size: 0.9rem;
+  }
+
+  .phone-emoji {
+    font-size: 2.2rem;
+  }
+
+  .qr-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .qr-label {
+    font-size: 0.8rem;
+  }
 }
 
 /* WELCOME CARD */
