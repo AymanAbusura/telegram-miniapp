@@ -109,7 +109,6 @@ body.no-scroll {
   font-size: 0.9rem;
 }
 
-/* 🌍 Responsive adjustments */
 @media (max-width: 768px) {
   .desktop-card {
     padding: 1.8rem;
@@ -536,7 +535,7 @@ body.no-scroll {
 .skeleton-image {
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: 10px;
   background: #e0e0e0;
   animation: pulse 1.5s infinite;
   margin-bottom: 12px;
