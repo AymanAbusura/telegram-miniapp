@@ -72,23 +72,20 @@ import Home from "./components/Home";
 import Benefit from "./components/Benefit";
 import Ranking from "./components/Ranking";
 import Profile from "./components/Profile";
-import WebVersion from "./components/WebVersion"; 
+import WebVersion from "./components/WebVersion";
 import './App.css';
 
 function App() {
   const [subid, setSubid] = useState(null);
-  const [isTelegram, setIsTelegram] = useState(false);
+  const [isTelegramApp, setIsTelegramApp] = useState(false);
 
   useEffect(() => {
-    if (window.Telegram?.WebApp) {
-      setIsTelegram(true);
-    }
+    const tg = window.Telegram?.WebApp;
 
-    let id = null;
+    const inTelegram = tg && typeof tg.initDataUnsafe === "object" && Object.keys(tg.initDataUnsafe).length > 0;
+    setIsTelegramApp(inTelegram);
 
-    if (window.Telegram?.WebApp?.initDataUnsafe?.start_param) {
-      id = window.Telegram.WebApp.initDataUnsafe.start_param;
-    }
+    let id = tg?.initDataUnsafe?.start_param || null;
 
     if (!id) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -104,7 +101,7 @@ function App() {
     }
   }, []);
 
-  if (!isTelegram) {
+  if (!isTelegramApp) {
     return <WebVersion />;
   }
 
