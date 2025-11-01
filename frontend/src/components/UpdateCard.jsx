@@ -90,11 +90,21 @@ export default function UpdateCard({ setSubscribed }) {
                 </div>
             ) : (
                 <>
-                    <img
-                        src={channelInfo.photo || "/default-channel.png"}
-                        alt="Channel Profile"
-                        className="channel-profile-image"
-                    />
+                    {channelInfo.photo ? (
+                        <img
+                            src={channelInfo.photo}
+                            alt="Channel Profile"
+                            className="channel-profile-image"
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.style.display = "none";
+                                setChannelInfo((prev) => ({ ...prev, photo: "" }));
+                            }}
+                        />
+                    ) : (
+                        <div className="skeleton-image"></div>
+                    )}
+
                     <div className="card-header">
                         <h2>{channelInfo.title}</h2>
                         <p>{channelInfo.description}</p>
