@@ -29,11 +29,13 @@ export default function UpdateCard({ setSubscribed }) {
                 alert(data.error);
             } else {
                 setSubscribed(data.subscribed);
+                localStorage.setItem("subscribed", data.subscribed ? "true" : "false");
                 alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
             }
 
             // PUBLIC CHANNEL
             // setSubscribed(data.subscribed);
+            // localStorage.setItem("subscribed", data.subscribed ? "true" : "false");
             // alert(data.subscribed ? `${content.subscribed}` : `${content.notSubscribed}`);
         } catch (err) {
             console.error(err);
