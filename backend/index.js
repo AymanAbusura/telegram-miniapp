@@ -140,8 +140,8 @@ app.get("/channel-info", async (req, res) => {
     if (chat.photo) {
       try {
         const fileId = chat.photo.big_file_id || chat.photo.small_file_id;
-        const file = await bot.telegram.getFileLink(fileId);
-        photoUrl = file.href;
+        const fileLink = await bot.telegram.getFileLink(fileId);
+        photoUrl = typeof fileLink === "string" ? fileLink : fileLink.href;
       } catch (photoErr) {
         console.warn("Could not fetch channel photo:", photoErr.message);
       }
@@ -149,24 +149,61 @@ app.get("/channel-info", async (req, res) => {
 
     const channelInfo = {
       title: chat.title || "Untitled Channel",
-      description: chat.description || content.emptyDescription,
+      description: chat.description || "No description available",
       photo: photoUrl,
     };
 
+    console.log("✅ Channel Info:", channelInfo);
+
     res.json(channelInfo);
   } catch (err) {
-    console.error("Error fetching channel info:", err.description || err.message);
+    console.error("❌ Error fetching channel info:", err.description || err.message);
 
     if (err.response && err.response.error_code === 400) {
       res.status(400).json({
-        error:
-          "Bot cannot access this private channel. Make sure the bot is a member/admin.",
+        error: "Bot cannot access this private channel. Make sure the bot is a member/admin.",
       });
     } else {
       res.status(500).json({ error: "Failed to fetch channel info" });
     }
   }
 });
+
+// app.get("/channel-info", async (req, res) => {
+//   try {
+//     const chat = await bot.telegram.getChat(CHANNEL_ID);
+
+//     let photoUrl = null;
+//     if (chat.photo) {
+//       try {
+//         const fileId = chat.photo.big_file_id || chat.photo.small_file_id;
+//         const file = await bot.telegram.getFileLink(fileId);
+//         photoUrl = file.href;
+//       } catch (photoErr) {
+//         console.warn("Could not fetch channel photo:", photoErr.message);
+//       }
+//     }
+
+//     const channelInfo = {
+//       title: chat.title || "Untitled Channel",
+//       description: chat.description || content.emptyDescription,
+//       photo: photoUrl,
+//     };
+
+//     res.json(channelInfo);
+//   } catch (err) {
+//     console.error("Error fetching channel info:", err.description || err.message);
+
+//     if (err.response && err.response.error_code === 400) {
+//       res.status(400).json({
+//         error:
+//           "Bot cannot access this private channel. Make sure the bot is a member/admin.",
+//       });
+//     } else {
+//       res.status(500).json({ error: "Failed to fetch channel info" });
+//     }
+//   }
+// });
 
 app.get("/", (req, res) => res.send("Bot is running ✅"));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
