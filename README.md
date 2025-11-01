@@ -26,7 +26,7 @@ It allows you to quickly spin up a mini-application inside Telegram, handle user
 * Frontend: React
 * Telegram API / Bot API for messaging & UI components
 * Deployment: Vercel and onRender
-* Languages: JavaScript (≈ 63.8%), CSS (≈ 34.9%), HTML (≈ 1.3%)
+* Languages: JavaScript, CSS, HTML
 
 ### Project Structure
 ```markdown
