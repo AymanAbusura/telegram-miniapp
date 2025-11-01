@@ -137,6 +137,7 @@ app.get("/channel-info", async (req, res) => {
     const chat = await bot.telegram.getChat(CHANNEL_ID);
 
     let photoUrl = null;
+
     if (chat.photo) {
       try {
         const fileId = chat.photo.big_file_id || chat.photo.small_file_id;
@@ -161,7 +162,8 @@ app.get("/channel-info", async (req, res) => {
 
     if (err.response && err.response.error_code === 400) {
       res.status(400).json({
-        error: "Bot cannot access this private channel. Make sure the bot is a member/admin.",
+        error:
+          "Bot cannot access this private channel. Make sure the bot is a member/admin.",
       });
     } else {
       res.status(500).json({ error: "Failed to fetch channel info" });
