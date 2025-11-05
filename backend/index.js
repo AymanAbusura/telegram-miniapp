@@ -50,8 +50,8 @@ function loadContent(langCode = "en") {
 bot.start((ctx) => {
   const rawLang = ctx.from?.language_code || "en";
   const lang = rawLang.split("-")[0].toLowerCase();
-
   const content = loadContent(lang);
+
   const payload = ctx.startPayload || "";
 
   const appUrl = payload + '?tgWebAppExpand=1'
@@ -174,7 +174,6 @@ app.get("/channel-info", async (req, res) => {
       }
     }
 
-    const content = loadContent("en");
     const channelInfo = {
       title: chat.title || "Untitled Channel",
       description: chat.description || content.emptyDescription,
