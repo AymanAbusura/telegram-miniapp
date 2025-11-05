@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import coinImg from "../assets/coin.webp";
+import Home from "./Home";
 
 export default function WelcomeCard({ content }) {
-  const navigate = useNavigate();
+  const [showHome, setShowHome] = useState(false);
+
+  if (showHome) {
+    return <Home />;
+  }
 
   return (
     <div className="welcome-container">
@@ -48,7 +52,7 @@ export default function WelcomeCard({ content }) {
           </div>
         </div>
 
-        <button className="start-button" onClick={() => navigate("/Home")}>
+        <button className="start-button" onClick={() => setShowHome(true)}>
           {content.buttonText}
         </button>
       </div>
