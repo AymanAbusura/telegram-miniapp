@@ -7,10 +7,10 @@ export default function MenuBar({ currentTab, setCurrentTab, content }) {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: content.home, icon: <FaHome />, path: "/Home" },
-    { name: content.benefit, icon: <FaBagShopping />, path: "/Benefit" },
-    { name: content.ranking, icon: <TrendingUp />, path: "/Ranking" },
-    { name: content.profile, icon: <FaUser />, path: "/Profile" },
+    { name: content.home, icon: <FaHome />, path: "/home" },
+    { name: content.benefit, icon: <FaBagShopping />, path: "/benefit" },
+    { name: content.ranking, icon: <TrendingUp />, path: "/ranking" },
+    { name: content.profile, icon: <FaUser />, path: "/profile" },
   ];
 
   return (

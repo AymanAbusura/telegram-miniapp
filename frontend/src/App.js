@@ -51,10 +51,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<WelcomeCard content={content.welcomeCard} />} />
-        <Route path="/Home" element={<Home subid={subid} content={content.home} />} />
-        <Route path="/Benefit" element={<Benefit content={content.benefit} />} />
-        <Route path="/Ranking" element={<Ranking content={content.ranking} />} />
-        <Route path="/Profile" element={<Profile content={content.profile} />} />
+        <Route path="/home" element={<Home subid={subid} content={content.home} />} />
+        <Route path="/benefit" element={<Benefit content={content.benefit} />} />
+        <Route path="/ranking" element={<Ranking content={content.ranking} />} />
+        <Route path="/profile" element={<Profile content={content.profile} />} />
       </Routes>
     </BrowserRouter>
   );
