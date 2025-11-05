@@ -28,7 +28,8 @@ function loadContent(langCode = "en") {
     const data = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(data);
   } catch (err) {
-    console.warn(`⚠️ Missing translation file for ${lang}. Falling back to English.`);
+    console.error(`❌ Failed to load ${filePath}: ${err.message}`);
+    console.warn(`⚠️ Falling back to English.`);
     return JSON.parse(fs.readFileSync("./localization/text_en.json", "utf-8"));
   }
 }
@@ -51,7 +52,6 @@ function loadContent(langCode = "en") {
 bot.start((ctx) => {
   const rawLang = ctx.from?.language_code || "en";
   const lang = rawLang.split("-")[0].toLowerCase();
-  const content = loadContent(lang);
 
   const payload = ctx.startPayload || "";
 
