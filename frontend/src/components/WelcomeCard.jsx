@@ -6,7 +6,7 @@ export default function WelcomeCard({ content }) {
   const [showHome, setShowHome] = useState(false);
 
   if (showHome) {
-    return <Home />;
+    return <Home content={content.home} subid={subid} />;
   }
 
   return (
