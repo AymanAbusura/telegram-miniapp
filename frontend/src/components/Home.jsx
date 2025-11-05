@@ -8,11 +8,7 @@ import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
 import UpdateCard from "../components/UpdateCard";
 
-import texts from "../data/texts.json";
-
-export default function Home() {
-  const content = texts.home;
-
+export default function Home({ content }) {
   const [subscribed, setSubscribed] = useState(() => {
     return localStorage.getItem("subscribed") === "true";
   });
@@ -159,6 +155,7 @@ export default function Home() {
           setWithdrawAmount={setWithdrawAmount}
           handleWithdrawSubmit={handleWithdrawSubmit}
           errorMessage={errorMessage}
+          content={content.withdraw}
         />
       </AnimatedModal>
 
@@ -168,7 +165,7 @@ export default function Home() {
         from="bottom"
         wrapperClass="updates-card-container"
       >
-        <UpdateCard setSubscribed={setSubscribed} />
+        <UpdateCard setSubscribed={setSubscribed} content={content.updateCard} />
       </AnimatedModal>
 
       <div className="balance-section" style={{ position: "relative" }}>

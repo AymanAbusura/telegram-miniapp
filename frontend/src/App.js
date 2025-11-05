@@ -6,20 +6,26 @@ import Benefit from "./components/Benefit";
 import Ranking from "./components/Ranking";
 import Profile from "./components/Profile";
 import WebVersion from "./components/WebVersion";
+import { detectLanguage, loadContent } from "./utils/localization";
 import './App.css';
 
 function App() {
   const [subid, setSubid] = useState(null);
   const [isTelegramApp, setIsTelegramApp] = useState(false);
+  const [content, setContent] = useState(null);
 
   useEffect(() => {
     const tg = window.Telegram?.WebApp;
-
-    const inTelegram = tg && typeof tg.initDataUnsafe === "object" && Object.keys(tg.initDataUnsafe).length > 0;
+    const inTelegram =
+      tg && typeof tg.initDataUnsafe === "object" && Object.keys(tg.initDataUnsafe).length > 0;
     setIsTelegramApp(inTelegram);
 
-    let id = tg?.initDataUnsafe?.start_param || null;
+    const lang = detectLanguage();
+    const localization = loadContent(lang);
+    console.log("🌍 Detected language:", lang);
+    setContent(localization);
 
+    let id = tg?.initDataUnsafe?.start_param || null;
     if (!id) {
       const urlParams = new URLSearchParams(window.location.search);
       id = urlParams.get("ref");
@@ -28,24 +34,26 @@ function App() {
     if (id) {
       setSubid(id);
       localStorage.setItem("startParam", id);
-      console.log("SubID найден:", id);
+      console.log("SubID found:", id);
     } else {
-      console.log("SubID не найден");
+      console.log("SubID not found");
     }
   }, []);
 
+  if (!content) return null;
+
   if (!isTelegramApp) {
-    return <WebVersion />;
+    return <WebVersion content={content.desktop} />;
   }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<WelcomeCard />} />
-        <Route path="/Home" element={<Home subid={subid} />} />
-        <Route path="/Benefit" element={<Benefit />} />
-        <Route path="/Ranking" element={<Ranking />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route path="/" element={<WelcomeCard content={content.welcomeCard} />} />
+        <Route path="/Home" element={<Home subid={subid} content={content.home} />} />
+        <Route path="/Benefit" element={<Benefit content={content.benefit} />} />
+        <Route path="/Ranking" element={<Ranking content={content.ranking} />} />
+        <Route path="/Profile" element={<Profile content={content.profile} />} />
       </Routes>
     </BrowserRouter>
   );

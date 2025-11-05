@@ -2,11 +2,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import coinImg from "../assets/coin.webp";
 
-import texts from "../data/texts.json";
-
-export default function WelcomeCard() {
+export default function WelcomeCard({ content }) {
   const navigate = useNavigate();
-  const content = texts.welcomeCard;
 
   return (
     <div className="welcome-container">

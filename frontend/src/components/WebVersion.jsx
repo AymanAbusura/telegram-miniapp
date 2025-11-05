@@ -1,8 +1,4 @@
-import texts from "../data/texts.json";
-
-const WebVersion = () => {
-    const content = texts.desktop;
-
+const WebVersion = ({ content }) => {
     return (
         <div className="desktop-container">
             <div className="desktop-card">

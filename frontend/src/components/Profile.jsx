@@ -7,11 +7,7 @@ import { ArrowUp, ArrowLeftRight } from 'lucide-react';
 import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
 
-import texts from "../data/texts.json";
-
-const Profile = () => {
-  const content = texts.profile;
-
+const Profile = ({ content }) => {
   const [currentTab, setCurrentTab] = useState("Profile");
   const [balance, setBalance] = useBalance();
 

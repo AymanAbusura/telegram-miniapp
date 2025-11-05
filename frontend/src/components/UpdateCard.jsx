@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { openTelegram } from '../utils/openTelegram';
-import texts from "../data/texts.json";
 
-export default function UpdateCard({ setSubscribed }) {
-    const content = texts.updateCard;
-
+export default function UpdateCard({ setSubscribed, content }) {
     const [loading, setLoading] = useState(true);
     const [checking, setChecking] = useState(false);
     const [channelInfo, setChannelInfo] = useState({

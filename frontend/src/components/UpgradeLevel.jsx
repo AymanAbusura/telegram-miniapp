@@ -1,11 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import coinImg from "../assets/coin.webp";
 import { openTelegram } from '../utils/openTelegram';
-import texts from "../data/texts.json";
 
-export default function UpgradeLevel({ onClose }) {
-    const content = texts.upgradeLevel;
-
+export default function UpgradeLevel({ onClose, content }) {
     return (
         <>
             <div className="upgrade-image">

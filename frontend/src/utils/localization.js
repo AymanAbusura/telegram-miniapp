@@ -1,9 +1,7 @@
 import en from "../localization/text_en.json";
 import ru from "../localization/text_ru.json";
-import es from "../localization/text_es.json";
-import hu from "../localization/text_hu.json";
 
-const translations = { en, ru, es, hu };
+const translations = { en, ru };
 
 export function detectLanguage() {
   const tgLang = window.Telegram?.WebApp?.initDataUnsafe?.user?.language_code;
@@ -14,7 +12,7 @@ export function detectLanguage() {
 }
 
 export function loadContent(langCode = "en") {
-  const supported = ["en", "ru", "es", "hu"];
+  const supported = ["en", "ru"];
   const lang = supported.includes(langCode) ? langCode : "en";
   return translations[lang] || translations.en;
 }

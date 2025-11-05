@@ -1,12 +1,10 @@
-import texts from "../data/texts.json";
-
 export default function WithdrawForm({
   withdrawAmount,
   setWithdrawAmount,
   handleWithdrawSubmit,
   errorMessage,
+  content
 }) {
-  const content = texts.withdrawForm;
 
   return (
     <>

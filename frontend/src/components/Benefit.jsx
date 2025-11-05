@@ -8,11 +8,7 @@ import AnimatedModal from "../components/AnimatedModal";
 import UpdateCard from "../components/UpdateCard";
 import UpgradeLevel from "../components/UpgradeLevel";
 
-import texts from "../data/texts.json";
-
-export default function Benefit() {
-  const content = texts.benefit;
-
+export default function Benefit({ content }) {
   const [currentTab, setCurrentTab] = useState("Benefit");
   const [balance] = useBalance();
 
@@ -93,7 +89,7 @@ export default function Benefit() {
         from="bottom"
         wrapperClass="updates-card-container"
       >
-        <UpgradeLevel onClose={() => setShowUpgradeLevel(false)} />
+        <UpgradeLevel onClose={() => setShowUpgradeLevel(false)} content={content.upgradeLevel} />
       </AnimatedModal>
 
       <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />

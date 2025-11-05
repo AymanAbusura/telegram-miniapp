@@ -2,13 +2,9 @@ import { useState } from "react";
 import useBalance from "../hooks/useBalance";
 import MenuBar from "./MenuBar";
 
-import texts from "../data/texts.json";
-
-export default function Ranking() {
+export default function Ranking({ content }) {
   const [currentTab, setCurrentTab] = useState("Ranking");
   const [balance] = useBalance();
-
-  const content = texts.ranking;
 
   const leaderboard = [
     { rank: 1, name: "Pourya Moradi", balance: 0 },
