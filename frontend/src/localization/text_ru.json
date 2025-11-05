@@ -82,11 +82,11 @@
     "withdraw_error_balance": "У вас недостаточно денег."
   },
 
-  "menu": {
-    "home": "Главная",
-    "benefit": "Преимущества",
-    "ranking": "Рейтинг",
-    "profile": "Профиль"
+  "menubar": {
+    "block_1": "Главная",
+    "block_2": "Преимущества",
+    "block_3": "Рейтинг",
+    "block_4": "Профиль"
   },
 
   "withdrawForm": {

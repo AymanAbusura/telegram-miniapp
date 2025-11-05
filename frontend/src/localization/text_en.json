@@ -82,11 +82,11 @@
     "withdraw_error_balance": "You don't have enough money."
   },
 
-  "menu": {
-    "home": "Home",
-    "benefit": "Benefit",
-    "ranking": "Ranking",
-    "profile": "Profile"
+  "menubar": {
+    "block_1": "Home",
+    "block_2": "Benefit",
+    "block_3": "Ranking",
+    "block_4": "Profile"
   },
 
   "withdrawForm": {

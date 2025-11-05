@@ -230,7 +230,7 @@ export default function Home({ content, subid }) {
         </div>
       </div>
 
-      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} content={content.menubar} />
     </div>
   );
 }
