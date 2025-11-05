@@ -48,7 +48,7 @@ export default function WelcomeCard({ content }) {
           </div>
         </div>
 
-        <button className="start-button" onClick={() => navigate("/Home")}>
+        <button className="start-button" onClick={() => navigate("Home")}>
           {content.buttonText}
         </button>
       </div>

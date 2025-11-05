@@ -38,7 +38,11 @@ function App() {
     } else {
       console.log("SubID not found");
     }
+    if (!window.location.hash) {
+      window.location.hash = "#/";
+    }
   }, []);
+  
 
   if (!content) return null;
 
@@ -50,10 +54,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<WelcomeCard content={content.welcomeCard} />} />
-        <Route path="/Home" element={<Home subid={subid} content={content.home} />} />
-        <Route path="/Benefit" element={<Benefit content={content.benefit} />} />
-        <Route path="/Ranking" element={<Ranking content={content.ranking} />} />
-        <Route path="/Profile" element={<Profile content={content.profile} />} />
+        <Route path="Home" element={<Home subid={subid} content={content.home} />} />
+        <Route path="Benefit" element={<Benefit content={content.benefit} />} />
+        <Route path="Ranking" element={<Ranking content={content.ranking} />} />
+        <Route path="Profile" element={<Profile content={content.profile} />} />
       </Routes>
     </Router>
   );
