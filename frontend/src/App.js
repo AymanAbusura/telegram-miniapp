@@ -50,7 +50,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<WelcomeCard content={content.welcomeCard} subid={subid} />} />
+        <Route path="/" element={<WelcomeCard content={content.welcomeCard} homeContent={content.home} subid={subid} />} />
         <Route path="/home" element={<Home subid={subid} content={content.home} />} />
         <Route path="/benefit" element={<Benefit content={content.benefit} />} />
         <Route path="/ranking" element={<Ranking content={content.ranking} />} />

@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 import coinImg from "../assets/coin.webp";
 import Home from "./Home";
 
-export default function WelcomeCard({ content, subid }) {
+export default function WelcomeCard({ content, homeContent, subid }) {
   const [showHome, setShowHome] = useState(false);
 
   if (showHome) {
-    return <Home content={content.home} subid={subid} />;
+    return <Home content={homeContent} subid={subid} />;
   }
 
   return (
