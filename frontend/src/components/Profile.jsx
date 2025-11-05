@@ -116,6 +116,7 @@ const Profile = ({ content }) => {
           setWithdrawAmount={setWithdrawAmount}
           handleWithdrawSubmit={handleWithdrawSubmit}
           errorMessage={errorMessage}
+          content={content.withdrawForm}
         />
       </AnimatedModal>
 
@@ -135,7 +136,7 @@ const Profile = ({ content }) => {
         </div>
       </section>
 
-      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} content={content.menubar} />
     </div>
   );
 };

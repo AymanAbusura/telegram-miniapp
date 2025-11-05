@@ -11,12 +11,25 @@ export default function UpdateCard({ setSubscribed, content }) {
         photo: "",
     });
 
+    const {
+        subscribe,
+        check,
+        Checking,
+        alert_message,
+        error_message,
+        subscribed: subscribedText,
+        notSubscribed,
+        energy_min,
+        energy_max,
+        channel_info_error
+    } = content;
+
     const handleCheckSubscription = async () => {
         setChecking(true);
 
         try {
             const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-            if (!userId) return alert(content.alert_message);
+            if (!userId) return alert(alert_message);
 
             const res = await fetch(`${process.env.REACT_APP_API_URL}/check-subscription/${userId}`);
             const data = await res.json();
@@ -26,11 +39,11 @@ export default function UpdateCard({ setSubscribed, content }) {
             } else {
                 setSubscribed(data.subscribed);
                 localStorage.setItem("subscribed", data.subscribed ? "true" : "false");
-                alert(data.subscribed ? content.subscribed : content.notSubscribed);
+                alert(data.subscribed ? subscribed : notSubscribed);
             }
         } catch (err) {
             console.error(err);
-            alert(content.error_message);
+            alert(error_message);
         } finally {
             setChecking(false);
         }
@@ -60,7 +73,7 @@ export default function UpdateCard({ setSubscribed, content }) {
                 setChannelInfo(data);
                 localStorage.setItem("channelInfo", JSON.stringify(data));
             } catch (err) {
-                console.error(content.channel_info_error, err);
+                console.error(channel_info_error, err);
             } finally {
                 setLoading(false);
             }
@@ -102,9 +115,9 @@ export default function UpdateCard({ setSubscribed, content }) {
             )}
 
             <div className="energy-update-card">
-                <div className="energy-info-update">{content.energy_min}</div>
+                <div className="energy-info-update">{energy_min}</div>
                 <ChevronRight size={20} />
-                <div className="energy-info-update">{content.energy_max}</div>
+                <div className="energy-info-update">{energy_max}</div>
             </div>
 
             <div className="update-buttons">
@@ -112,7 +125,7 @@ export default function UpdateCard({ setSubscribed, content }) {
                     className="amount-submit-button subscribe-update-button"
                     onClick={handleSubscribeClick}
                 >
-                    {content.subscribe}
+                    {subscribe}
                 </button>
 
                 <button
@@ -120,7 +133,7 @@ export default function UpdateCard({ setSubscribed, content }) {
                     onClick={handleCheckSubscription}
                     disabled={checking}
                 >
-                    {checking ? content.Checking : content.check}
+                    {checking ? Checking : check}
                 </button>
             </div>
         </>

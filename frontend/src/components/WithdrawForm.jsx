@@ -6,13 +6,21 @@ export default function WithdrawForm({
   content
 }) {
 
+  const {
+    title,
+    inputPlaceholder,
+    buttonText,
+    errorColor,
+    errorWeight,
+  } = content;
+
   return (
     <>
-      <h2>{content.title}</h2>
+      <h2>{title}</h2>
 
       <input
         type="number"
-        placeholder={content.inputPlaceholder}
+        placeholder={inputPlaceholder}
         value={withdrawAmount}
         onChange={(e) => setWithdrawAmount(e.target.value)}
         className="amount-input"
@@ -21,8 +29,8 @@ export default function WithdrawForm({
       {errorMessage && (
         <div
           style={{
-            color: content.errorColor,
-            fontWeight: content.errorWeight,
+            color: errorColor,
+            fontWeight: errorWeight,
           }}
         >
           {errorMessage}
@@ -30,7 +38,7 @@ export default function WithdrawForm({
       )}
 
       <button onClick={handleWithdrawSubmit} className="amount-submit-button">
-        {content.buttonText}
+        {buttonText}
       </button>
     </>
   );

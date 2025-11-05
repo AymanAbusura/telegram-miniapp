@@ -50,7 +50,7 @@ export default function Ranking({ content }) {
         ))}
       </div>
 
-      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} content={content.menubar} />
     </div>
   );
 }

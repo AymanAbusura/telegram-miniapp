@@ -80,7 +80,7 @@ export default function Benefit({ content }) {
         from="bottom"
         wrapperClass="updates-card-container"
       >
-        <UpdateCard onClose={() => setShowUpdatesCard(false)} />
+        <UpdateCard onClose={() => setShowUpdatesCard(false)} content={content.updateCard} />
       </AnimatedModal>
 
       <AnimatedModal
@@ -92,7 +92,7 @@ export default function Benefit({ content }) {
         <UpgradeLevel onClose={() => setShowUpgradeLevel(false)} content={content.upgradeLevel} />
       </AnimatedModal>
 
-      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <MenuBar currentTab={currentTab} setCurrentTab={setCurrentTab} content={content.menubar} />
     </div>
   );
 }

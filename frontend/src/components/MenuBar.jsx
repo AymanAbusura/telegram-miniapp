@@ -6,18 +6,11 @@ import { TrendingUp } from "lucide-react";
 export default function MenuBar({ currentTab, setCurrentTab, content }) {
   const navigate = useNavigate();
 
-  const menuContent = content || {
-    block_1: "Home",
-    block_2: "Benefits",
-    block_3: "Ranking",
-    block_4: "Profile",
-  };
-
   const menuItems = [
-    { name: menuContent.block_1, icon: <FaHome />, path: "/home" },
-    { name: menuContent.block_2, icon: <FaBagShopping />, path: "/benefit" },
-    { name: menuContent.block_3, icon: <TrendingUp />, path: "/ranking" },
-    { name: menuContent.block_4, icon: <FaUser />, path: "/profile" },
+    { name: content.block_1, icon: <FaHome />, path: "/home" },
+    { name: content.block_2, icon: <FaBagShopping />, path: "/benefit" },
+    { name: content.block_3, icon: <TrendingUp />, path: "/ranking" },
+    { name: content.block_4, icon: <FaUser />, path: "/profile" },
   ];
 
   return (

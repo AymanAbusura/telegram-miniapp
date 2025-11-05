@@ -155,7 +155,7 @@ export default function Home({ content, subid }) {
           setWithdrawAmount={setWithdrawAmount}
           handleWithdrawSubmit={handleWithdrawSubmit}
           errorMessage={errorMessage}
-          content={content.withdraw}
+          content={content.withdrawForm}
         />
       </AnimatedModal>
 
