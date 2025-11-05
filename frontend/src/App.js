@@ -41,11 +41,11 @@ function App() {
   }, []);
   
 
-  if (!content) return null;
+  if (!content) return <div>Loading...</div>;
 
-  if (!isTelegramApp) {
-    return <WebVersion content={content.desktop} />;
-  }
+  // if (!isTelegramApp) {
+  //   return <WebVersion content={content.desktop} />;
+  // }
 
   return (
     <BrowserRouter>
