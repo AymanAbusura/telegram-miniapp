@@ -10,8 +10,6 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-// const content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
-
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBLINK = process.env.WEB_LINK;
 const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
@@ -53,6 +51,7 @@ bot.start((ctx) => {
   const rawLang = ctx.from?.language_code || "en";
   const lang = rawLang.split("-")[0].toLowerCase();
 
+  const content = loadContent(lang);
   const payload = ctx.startPayload || "";
 
   const appUrl = payload + '?tgWebAppExpand=1'
