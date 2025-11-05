@@ -48,7 +48,7 @@ function loadContent(langCode = "en") {
 
 // ДЛЯ SUBID
 bot.start((ctx) => {
-  const lang = ctx.from?.language_code || "en";
+  const lang = (ctx.from?.language_code?.split("-")[0] || "en").toLowerCase();
   const content = loadContent(lang);
 
   const payload = ctx.startPayload || "";
@@ -173,6 +173,7 @@ app.get("/channel-info", async (req, res) => {
       }
     }
 
+    const content = loadContent("en");
     const channelInfo = {
       title: chat.title || "Untitled Channel",
       description: chat.description || content.emptyDescription,
