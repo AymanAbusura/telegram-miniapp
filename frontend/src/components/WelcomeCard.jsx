@@ -65,7 +65,7 @@ export default function WelcomeCard({ content, subid }) {
   const navigate = useNavigate();
 
   const handleStart = () => {
-    navigate("/home"); // navigate to /home route
+    navigate("/home");
   };
 
   return (
