@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import WelcomeCard from "./components/WelcomeCard";
 import Home from "./components/Home";
 import Benefit from "./components/Benefit";
@@ -47,7 +47,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<WelcomeCard content={content.welcomeCard} />} />
         <Route path="/Home" element={<Home subid={subid} content={content.home} />} />
@@ -55,7 +55,7 @@ function App() {
         <Route path="/Ranking" element={<Ranking content={content.ranking} />} />
         <Route path="/Profile" element={<Profile content={content.profile} />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
