@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import WelcomeCard from "./components/WelcomeCard";
 import Home from "./components/Home";
 import Benefit from "./components/Benefit";
@@ -38,9 +38,6 @@ function App() {
     } else {
       console.log("SubID not found");
     }
-    if (!window.location.hash) {
-      window.location.hash = "#/";
-    }
   }, []);
   
 
@@ -51,15 +48,15 @@ function App() {
   }
 
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<WelcomeCard content={content.welcomeCard} />} />
-        <Route path="Home" element={<Home subid={subid} content={content.home} />} />
-        <Route path="Benefit" element={<Benefit content={content.benefit} />} />
-        <Route path="Ranking" element={<Ranking content={content.ranking} />} />
-        <Route path="Profile" element={<Profile content={content.profile} />} />
+        <Route path="/Home" element={<Home subid={subid} content={content.home} />} />
+        <Route path="/Benefit" element={<Benefit content={content.benefit} />} />
+        <Route path="/Ranking" element={<Ranking content={content.ranking} />} />
+        <Route path="/Profile" element={<Profile content={content.profile} />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
