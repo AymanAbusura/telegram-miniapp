@@ -2,7 +2,7 @@
 // import { motion } from "framer-motion";
 // import coinImg from "../assets/coin.webp";
 
-// export default function WelcomeCard({ content, homeContent, subid }) {
+// export default function WelcomeCard({ content, subid }) {
 //   const navigate = useNavigate();
 
 //   return (
@@ -56,15 +56,17 @@
 //   );
 // }
 
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom"; // ✅ import
 import coinImg from "../assets/coin.webp";
 
 export default function WelcomeCard({ content, subid }) {
   const navigate = useNavigate();
 
   const handleStart = () => {
+    // Update URL for React Router
+    window.history.pushState({}, "", "/home");
+    // Navigate using React Router
     navigate("/home");
   };
 
@@ -84,7 +86,9 @@ export default function WelcomeCard({ content, subid }) {
         />
 
         <h1 className="welcome-header">
-          {content.headerStart} <span className="highlight">{content.highlight}</span> {content.headerEnd}
+          {content.headerStart}{" "}
+          <span className="highlight">{content.highlight}</span>{" "}
+          {content.headerEnd}
         </h1>
         <p className="subtext">{content.subtext}</p>
 
