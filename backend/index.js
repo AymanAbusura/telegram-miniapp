@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 10000;
 app.use(cors());
 app.use(express.json());
 
-const content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
+// const content = JSON.parse(fs.readFileSync("text.json", "utf-8"));
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBLINK = process.env.WEB_LINK;
@@ -18,8 +18,25 @@ const CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID;
 
 const bot = new Telegraf(TOKEN);
 
+// FOR LOCALIZATION
+function loadContent(langCode = "en") {
+  const supportedLangs = ["en", "ru", "es", "hu"];
+  const lang = supportedLangs.includes(langCode) ? langCode : "en";
+  const filePath = `./localization/text_${lang}.json`;
+
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  } catch (err) {
+    console.warn(`⚠️ Missing translation file for ${lang}. Falling back to English.`);
+    return JSON.parse(fs.readFileSync("./localization/text_en.json", "utf-8"));
+  }
+}
+
 // БЕЗ SUBID
 // bot.start((ctx) => {
+//  const lang = ctx.from?.language_code || "en";
+//  const content = loadContent(lang);
+
 //   ctx.reply(content.welcomeMessage, {
 //     reply_markup: {
 //       inline_keyboard: [
@@ -31,15 +48,24 @@ const bot = new Telegraf(TOKEN);
 
 // ДЛЯ SUBID
 bot.start((ctx) => {
-  const payload = ctx.startPayload;
-  console.log("Пользователь зашел с payload:", payload);
+  const lang = ctx.from?.language_code || "en";
+  const content = loadContent(lang);
 
-  const webLinkWithParam = payload ? `${WEBLINK}?ref=${payload}` : WEBLINK;
+  const payload = ctx.startPayload || "";
+
+  const appUrl = payload + '?tgWebAppExpand=1'
+    ? `${WEBLINK}?subid=${encodeURIComponent(payload)}`
+    : WEBLINK;
 
   ctx.reply(content.welcomeMessage, {
     reply_markup: {
       inline_keyboard: [
-        [{ text: content.goToMiniAppButton, web_app: { url: webLinkWithParam } }],
+        [
+          {
+            text: content.goToMiniAppButton,
+            web_app: { url: appUrl },
+          },
+        ],
       ],
     },
   });
