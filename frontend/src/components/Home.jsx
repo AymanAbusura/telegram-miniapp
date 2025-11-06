@@ -13,7 +13,7 @@ export default function Home({ content }) {
     return localStorage.getItem("subscribed") === "true";
   });
 
-  const [currentTab, setCurrentTab] = useState("Home");
+  const [currentTab, setCurrentTab] = useState("home");
   const [balance, setBalance] = useBalance();
 
   const [energy, setEnergy] = useState(() => {

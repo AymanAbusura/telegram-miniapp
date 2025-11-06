@@ -9,18 +9,11 @@ import UpdateCard from "../components/UpdateCard";
 import UpgradeLevel from "../components/UpgradeLevel";
 
 export default function Benefit({ content }) {
-  const [currentTab, setCurrentTab] = useState("Benefit");
+  const [currentTab, setCurrentTab] = useState("benefit");
   const [balance] = useBalance();
 
   const [showUpdatesCard, setShowUpdatesCard] = useState(false);
   const [showUpgradeLevel, setShowUpgradeLevel] = useState(false);
-
-  useEffect(() => {
-    document.body.classList.add("no-scroll");
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
-  }, []);
 
   return (
     <div className="benefit-container">

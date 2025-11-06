@@ -3,7 +3,7 @@ import useBalance from "../hooks/useBalance";
 import MenuBar from "./MenuBar";
 
 export default function Ranking({ content }) {
-  const [currentTab, setCurrentTab] = useState("Ranking");
+  const [currentTab, setCurrentTab] = useState("ranking");
   const [balance] = useBalance();
 
   const leaderboard = [

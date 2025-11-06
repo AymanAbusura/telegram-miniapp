@@ -8,7 +8,7 @@ import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
 
 const Profile = ({ content }) => {
-  const [currentTab, setCurrentTab] = useState("Profile");
+  const [currentTab, setCurrentTab] = useState("profile");
   const [balance, setBalance] = useBalance();
 
   const [userName, setUserName] = useState("");
@@ -68,13 +68,6 @@ const Profile = ({ content }) => {
     setErrorMessage("");
     alert(`${content.withdraw_success}${amount}`);
   };
-
-  useEffect(() => {
-    document.body.classList.add("no-scroll");
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
-  }, []);
 
   return (
     <div className="profile-container">
