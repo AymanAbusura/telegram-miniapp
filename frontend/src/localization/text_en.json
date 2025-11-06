@@ -51,8 +51,6 @@
     "withdrawForm": {
       "title": "Withdraw Funds",
       "inputPlaceholder": "Amount ($)",
-      "errorColor": "red",
-      "errorWeight": "bold",
       "buttonText": "Done"
     },
     "updateCard": {
@@ -148,8 +146,6 @@
     "withdrawForm": {
       "title": "Withdraw Funds",
       "inputPlaceholder": "Amount ($)",
-      "errorColor": "red",
-      "errorWeight": "bold",
       "buttonText": "Done"
     },
     "menubar": {

@@ -51,8 +51,6 @@
     "withdrawForm": {
       "title": "Вывод средств",
       "inputPlaceholder": "Сумма ($)",
-      "errorColor": "красный",
-      "errorWeight": "жирный",
       "buttonText": "Готово"
     },
     "updateCard": {
@@ -147,8 +145,6 @@
     "withdrawForm": {
       "title": "Вывод средств",
       "inputPlaceholder": "Сумма ($)",
-      "errorColor": "красный",
-      "errorWeight": "жирный",
       "buttonText": "Готово"
     },
     "menubar": {
