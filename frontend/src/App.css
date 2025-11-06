@@ -7,10 +7,6 @@ body.no-scroll {
   overflow: hidden;
 }
 
-html, body {
-  overflow: hidden;
-}
-
 html::-webkit-scrollbar, body::-webkit-scrollbar {
   display: none;
 }
@@ -469,6 +465,10 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 }
 
 .amount-submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   width: 300px;
   padding: 10px 20px;
   border-radius: 8px;
@@ -1033,6 +1033,8 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 .subscribe-update-button {
   width: 150px;
   text-align: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .check-update-button {
