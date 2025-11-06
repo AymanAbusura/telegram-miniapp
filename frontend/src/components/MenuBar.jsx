@@ -7,20 +7,20 @@ export default function MenuBar({ currentTab, setCurrentTab, content }) {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: content.block_1, icon: <FaHome />, path: "/home" },
-    { name: content.block_2, icon: <FaBagShopping />, path: "/benefit" },
-    { name: content.block_3, icon: <TrendingUp />, path: "/ranking" },
-    { name: content.block_4, icon: <FaUser />, path: "/profile" },
+    { key: "home", name: content.block_1, icon: <FaHome />, path: "/home" },
+    { key: "benefit", name: content.block_2, icon: <FaBagShopping />, path: "/benefit" },
+    { key: "ranking", name: content.block_3, icon: <TrendingUp />, path: "/ranking" },
+    { key: "profile", name: content.block_4, icon: <FaUser />, path: "/profile" },
   ];
 
   return (
     <div className="menu-bar">
       {menuItems.map((item) => (
         <div
-          key={item.name}
-          className={`menu-item ${currentTab === item.name ? "active" : ""}`}
+          key={item.key}
+          className={`menu-item ${currentTab === item.key ? "active" : ""}`}
           onClick={() => {
-            setCurrentTab(item.name);
+            setCurrentTab(item.key);
             navigate(item.path);
           }}
         >
