@@ -7,6 +7,14 @@ body.no-scroll {
   overflow: hidden;
 }
 
+html, body {
+  overflow: hidden;
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}
+
 /* WEB VERSION */
 .desktop-container {
   min-height: 100vh;

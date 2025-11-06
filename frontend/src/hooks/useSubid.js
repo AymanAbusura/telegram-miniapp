@@ -1,9 +1,7 @@
-// src/hooks/useSubid.js
 import { useEffect, useState } from "react";
 
 export default function useSubid() {
   const [subid, setSubid] = useState(() => {
-    // попробуем взять из localStorage, если уже был
     return localStorage.getItem("keitaro_subid") || "";
   });
 
