@@ -48,6 +48,13 @@ function App() {
     setContent(localization);
 
   }, [subid]);
+
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+
+    const inTelegram = tg && typeof tg.initDataUnsafe === "object" && Object.keys(tg.initDataUnsafe).length > 0;
+    setIsTelegramApp(inTelegram);
+  }, []);
   
   useEffect(() => {
     const lang = detectLanguage();
