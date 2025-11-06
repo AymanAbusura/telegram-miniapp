@@ -8,7 +8,7 @@ import AnimatedModal from "../components/AnimatedModal";
 import WithdrawForm from "../components/WithdrawForm";
 import UpdateCard from "../components/UpdateCard";
 
-export default function Home({ content, subid }) {
+export default function Home({ content }) {
   const [subscribed, setSubscribed] = useState(() => {
     return localStorage.getItem("subscribed") === "true";
   });

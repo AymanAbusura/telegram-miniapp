@@ -2,9 +2,15 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import coinImg from "../assets/coin.webp";
 
-export default function WelcomeCard({ content, subid }) {
+export default function WelcomeCard({ content }) {
   const navigate = useNavigate();
 
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+  
   const handleStart = () => {
     window.history.pushState({}, "", "/home");
     navigate("/home");

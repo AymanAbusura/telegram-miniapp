@@ -131,6 +131,7 @@
   },
 
   "profile": {
+    "guest_name": "гость",
     "started_playing": "Начал играть –",
     "funds_in_balance": "Средства на балансе",
     "withdrawal_button": "Вывод",

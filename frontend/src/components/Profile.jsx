@@ -22,10 +22,10 @@ const Profile = ({ content }) => {
     const tg = window.Telegram?.WebApp;
     if (tg?.initDataUnsafe?.user) {
       const user = tg.initDataUnsafe.user;
-      const name = user.first_name || user.last_name || "Guest";
+      const name = user.first_name || user.last_name || content.guest_name;
       setUserName(name);
     } else {
-      setUserName("Guest");
+      setUserName(content.guest_name);
     }
 
     const savedDate = localStorage.getItem("startDate");

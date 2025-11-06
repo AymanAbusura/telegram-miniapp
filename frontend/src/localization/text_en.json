@@ -68,6 +68,12 @@
       "subscribed": "You are subscribed ✅",
       "notSubscribed": "You are not subscribed ❌",
       "channel_info_error": "Error fetching channel info:"
+    },
+    "menubar": {
+      "block_1": "Home",
+      "block_2": "Benefits",
+      "block_3": "Ranking",
+      "block_4": "Profile"
     }
   },
 
@@ -102,6 +108,12 @@
       "subscribed": "You are subscribed ✅",
       "notSubscribed": "You are not subscribed ❌",
       "channel_info_error": "Error fetching channel info:"
+    },
+    "menubar": {
+      "block_1": "Home",
+      "block_2": "Benefits",
+      "block_3": "Ranking",
+      "block_4": "Profile"
     }
   },
 
@@ -109,10 +121,17 @@
     "title": "Ranking",
     "my_rank_label": "You",
     "currency": "$",
-    "leaderboard_title": "Top Players"
+    "leaderboard_title": "Top Players",
+    "menubar": {
+      "block_1": "Home",
+      "block_2": "Benefits",
+      "block_3": "Ranking",
+      "block_4": "Profile"
+    }
   },
 
   "profile": {
+    "guest_name": "Guest",
     "started_playing": "Started playing –",
     "funds_in_balance": "Funds in Balance",
     "withdrawal_button": "Withdraw",
@@ -125,19 +144,19 @@
     "withdraw_error_invalid": "Please enter a valid number.",
     "withdraw_error_minimum": "Minimum withdrawal amount is $200,000",
     "withdraw_error_balance": "You don't have enough money.",
+    
     "withdrawForm": {
       "title": "Withdraw Funds",
       "inputPlaceholder": "Amount ($)",
       "errorColor": "red",
       "errorWeight": "bold",
       "buttonText": "Done"
+    },
+    "menubar": {
+      "block_1": "Home",
+      "block_2": "Benefits",
+      "block_3": "Ranking",
+      "block_4": "Profile"
     }
-  },
-
-  "menubar": {
-    "block_1": "Home",
-    "block_2": "Benefits",
-    "block_3": "Ranking",
-    "block_4": "Profile"
   }
 }

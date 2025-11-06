@@ -1024,6 +1024,7 @@ body.no-scroll {
 
 .subscribe-update-button {
   width: 150px;
+  text-align: center;
 }
 
 .check-update-button {
